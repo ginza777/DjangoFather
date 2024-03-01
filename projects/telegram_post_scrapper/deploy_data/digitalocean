@@ -1,0 +1,212 @@
+sudo apt update
+sudo apt install nginx
+sudo systemctl enable nginx
+sudo systemctl start nginx
+sudo systemctl status nginx
+sudo nginx -t
+sudo systemctl restart nginx
+apt install python3-virtualenv
+apt install redis-server
+
+
+sudo apt update
+sudo apt install python3-venv python3-dev libpq-dev postgresql postgresql-contrib nginx curl
+
+sudo -u postgres psql
+
+CREATE DATABASE ads2;
+CREATE USER sherzamon WITH PASSWORD 'postgres';
+
+ALTER ROLE sherzamon SET client_encoding TO 'utf8';
+ALTER ROLE sherzamon SET default_transaction_isolation TO 'read committed';
+ALTER ROLE sherzamon SET timezone TO 'UTC';
+
+GRANT ALL PRIVILEGES ON DATABASE ads TO sherzamon;
+
+pip install django gunicorn psycopg2-binary
+
+
+python manage.py migrate
+python manage.py collectstatic
+python manage.py createsuperuser
+
+
+
+python manage.py runserver 0.0.0.0:8000
+pip install gunicorn
+
+sudo nano /etc/systemd/system/ads.socket
+
+[Unit]
+Description=gunicorn socket
+
+[Socket]
+ListenStream=/run/ads.sock
+
+[Install]
+WantedBy=sockets.target
+
+
+sudo nano /etc/systemd/system/ads.service
+
+
+[Unit]
+Description=gunicorn daemon
+Requires=ads.socket
+After=network.target
+
+[Service]
+User=root
+Group=www-data
+WorkingDirectory=/var/projects/ads_manager/Telegram_ads_meneger
+ExecStart=/var/projects/ads_manager/env/bin/gunicorn \
+          --access-logfile - \
+          --workers 4 \
+          --bind unix:/run/ads.sock \
+          Ads_manager.wsgi:application
+
+[Install]
+WantedBy=multi-user.target
+
+
+sudo systemctl start ads.socket
+sudo systemctl enable ads.socket
+
+sudo systemctl status ads.socket
+file /run/ads.sock
+sudo journalctl -u ads.socket
+sudo systemctl status ads
+curl --unix-socket /run/ads.sock localhost
+sudo systemctl status ads
+sudo journalctl -u ads
+
+sudo systemctl daemon-reload
+sudo systemctl restart ads
+
+sudo nano /etc/nginx/sites-available/sherzamon.cloud
+
+
+server {
+    listen 80;
+    server_name sherzamon.cloud;
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location /static/ {
+        root /var/projects/ads_manager/Telegram_ads_meneger;
+    }
+
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/run/ads.sock;
+    }
+}
+
+
+
+sudo ln -s /etc/nginx/sites-available/sherzamon.cloud /etc/nginx/sites-enabled
+sudo nginx -t
+sudo systemctl restart nginx
+journalctl -xeu nginx.service
+
+
+
+
+
+#certbot
+
+sudo apt install certbot python3-certbot-nginx
+sudo nano /etc/nginx/sites-available/sherzamon.cloud
+sudo nginx -t
+sudo systemctl reload nginx
+sudo certbot --nginx -d sherzamon.cloud
+sudo systemctl status certbot.timer
+sudo certbot renew --dry-run
+
+
+
+sudo nano /etc/systemd/system/celery_ads_manager_beat.service
+
+
+[Unit]
+Description=Celery Ads Manager Beat Scheduler
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/var/projects/ads_manager/Telegram_ads_meneger
+ExecStart=/bin/bash -c '/var/projects/ads_manager/env/bin/celery -A Ads_manager beat --loglevel=info --scheduler django_celery_beat.schedulers:DatabaseScheduler'
+Restart=always
+User=root
+
+[Install]
+WantedBy=multi-user.target
+
+
+
+
+
+sudo nano /etc/systemd/system/celery_ads_manager_worker.service
+
+
+[Unit]
+Description=Celery Ads Manager Worker
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/var/projects/ads_manager/Telegram_ads_meneger
+ExecStart=/bin/bash -c '/var/projects/ads_manager/env/bin/celery -A Ads_manager worker   -Q ads_manager_queue  --loglevel=info '
+Restart=always
+User=root
+
+[Install]
+WantedBy=multi-user.target
+
+
+python manage.py client
+celery -A  Ads_manager beat --loglevel=info  --scheduler django_celery_beat.schedulers:DatabaseScheduler
+celery -A  Ads_manager worker -Q ads_manager_queue --loglevel=info
+
+
+# Systemd xizmatlarini qayta boshlash
+sudo systemctl daemon-reload
+
+# Celery xizmatini qayta boshlash
+sudo systemctl enable celery_ads_manager_worker
+sudo systemctl start celery_ads_manager_worker
+sudo systemctl restart celery_ads_manager_worker
+sudo systemctl status celery_ads_manager_worker
+
+
+
+# Celery beat xizmatini qayta boshlash (agar kerak bo'lsa)
+sudo systemctl enable celery_ads_manager_beat
+sudo systemctl start celery_ads_manager_beat
+sudo systemctl restart celery_ads_manager_beat
+
+
+
+
+# Telegram_ads.socket va telegram_ads.service xizmatlarini qayta boshlash
+sudo systemctl restart ads.socket
+sudo systemctl restart ads.service
+
+# client.service xizmatini qayta boshlash (agar kerak bo'lsa)
+#sudo systemctl restart client.service
+
+# Nginx konfiguratsiyasini tekshirish va Nginx ni qayta boshlash
+sudo nginx -t && sudo systemctl restart nginx
+
+
+sudo systemctl status celery_ads_manager_worker
+sudo systemctl status celery_ads_manager_beat
+
+
+sudo journalctl -u celery_ads_manager_beat --lines 50
+sudo journalctl -u celery_ads_manager_worker --lines 50
+
+
+
+
+
+

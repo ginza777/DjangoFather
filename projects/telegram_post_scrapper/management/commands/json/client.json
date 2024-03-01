@@ -1,0 +1,15 @@
+[
+  {
+    "model": "setting_ads.client_settings",
+    "pk": 1,
+    "fields": {
+      "created_at": "2023-12-23T21:22:51.021Z",
+      "updated_at": "2023-12-23T21:22:51.021Z",
+      "api_id": "29441076",
+      "api_hash": "2c170fe7bc8b8c8f8a1e1ad72db9710e",
+      "phone": "+998993485501",
+      "token": null,
+      "session": ""
+    }
+  }
+]

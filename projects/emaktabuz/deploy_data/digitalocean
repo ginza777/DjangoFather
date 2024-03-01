@@ -1,0 +1,144 @@
+
+/var/projects/emaktabuz/env
+/var/projects/emaktabuz/EmaktabUz
+
+
+python manage.py migrate
+python manage.py collectstatic
+python manage.py createsuperuser
+pip install gunicorn
+
+sudo nano /etc/systemd/system/emaktab.socket
+
+[Unit]
+Description=gunicorn socket
+
+[Socket]
+ListenStream=/run/emaktab.sock
+
+[Install]
+WantedBy=sockets.target
+
+
+sudo nano /etc/systemd/system/emaktab.service
+
+
+[Unit]
+Description=gunicorn daemon
+Requires=emaktab.socket
+After=network.target
+
+[Service]
+User=root
+Group=www-data
+WorkingDirectory=/var/projects/emaktabuz/EmaktabUz
+ExecStart=/var/projects/emaktabuz/env/bin/gunicorn \
+          --access-logfile - \
+          --workers 4 \
+          --bind unix:/run/emaktab.sock \
+          EmaktabUz.wsgi:application
+
+[Install]
+WantedBy=multi-user.target
+
+
+sudo systemctl start emaktab.socket
+sudo systemctl enable emaktab.socket
+sudo systemctl status emaktab.socket
+
+file /run/emaktab.sock
+sudo journalctl -u ads.socket
+curl --unix-socket /run/emaktab.sock localhost
+sudo journalctl -u emaktab
+
+sudo systemctl daemon-reload
+sudo systemctl restart emaktab
+
+sudo nano /etc/nginx/sites-available/emaktab.sherzamon.cloud
+
+
+server {
+    listen 80;
+    server_name emaktab.sherzamon.cloud;
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location /static/ {
+        root /var/projects/emaktabuz/EmaktabUz;
+    }
+
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/run/emaktab.sock;
+    }
+}
+
+
+
+sudo ln -s /etc/nginx/sites-available/emaktab.sherzamon.cloud /etc/nginx/sites-enabled
+sudo nginx -t
+sudo systemctl restart nginx
+journalctl -xeu nginx.service
+
+
+
+
+
+#certbot
+
+sudo apt install certbot python3-certbot-nginx
+sudo nano /etc/nginx/sites-available/emaktab.sherzamon.cloud
+sudo nginx -t
+sudo systemctl reload nginx
+sudo certbot --nginx -d emaktab.sherzamon.cloud
+sudo python3.10 /usr/local/bin/certbot --nginx -d emaktab.sherzamon.cloud
+sudo certbot --nginx -d emaktab.sherzamon.cloud --rsa-key-size 2048
+sudo certbot --nginx -d emaktab.sherzamon.cloud --rsa-key-size 2048
+
+sudo systemctl status certbot.timer
+sudo certbot renew --dry-run
+
+
+
+sudo nano /etc/systemd/system/emaktab_beat.service
+
+[Unit]
+Description=Celery EmaktabUz Beat Scheduler
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/var/projects/emaktabuz/EmaktabUz
+ExecStart=/bin/bash -c '/var/projects/emaktabuz/env/bin/celery -A EmaktabUz beat --loglevel=info --scheduler django_celery_beat.schedulers:DatabaseScheduler'
+Restart=always
+User=root
+
+[Install]
+WantedBy=multi-user.target
+
+
+
+
+
+sudo nano /etc/systemd/system/emaktab_worker.service
+
+[Unit]
+Description=Celery EmaktabUz Worker
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/var/projects/emaktabuz/EmaktabUz
+ExecStart=/bin/bash -c '/var/projects/emaktabuz/env/bin/celery -A EmaktabUz worker  -Q emaktab_queue --loglevel=info '
+Restart=always
+User=root
+
+[Install]
+WantedBy=multi-user.target
+
+
+
+
+
+
+celery -A  EmaktabUz beat --loglevel=info  --scheduler django_celery_beat.schedulers:DatabaseScheduler
+celery -A  EmaktabUz worker -Q emaktab_queue --loglevel=info

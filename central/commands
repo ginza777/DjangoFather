@@ -1,0 +1,16 @@
+
+
+#data load for emaktabuz...
+python manage.py emaktab_data
+
+=========================================================
+
+#data load for telegram_post_scrapper...
+python manage.py data
+
+=========================================================
+
+#run telegram client for telegram_post_scrapper...
+python manage.py client
+
+=========================================================

@@ -1,0 +1,13 @@
+[
+  {
+    "model": "setting_ads.bot",
+    "pk": 1,
+    "fields": {
+      "created_at": "2023-12-23T20:29:16.570Z",
+      "updated_at": "2023-12-23T20:29:16.570Z",
+      "bot_name": "user_checker_member",
+      "bot_token": "6567332198:AAHRaGT5xLJdsJbWkugqgSJHbPGi8Zr2_ZI",
+      "bot_link": "https://t.me/user_checker_member_bot"
+    }
+  }
+]

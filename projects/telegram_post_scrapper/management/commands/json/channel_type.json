@@ -1,0 +1,23 @@
+[
+  {
+    "model": "setting_ads.channel_type",
+    "pk": 1,
+    "fields": {
+      "type": "home_ads"
+    }
+  },
+  {
+    "model": "setting_ads.channel_type",
+    "pk": 2,
+    "fields": {
+      "type": "car_ads"
+    }
+  },
+  {
+    "model": "setting_ads.channel_type",
+    "pk": 3,
+    "fields": {
+      "type": "phone_ads"
+    }
+  }
+]
