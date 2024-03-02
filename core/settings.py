@@ -59,8 +59,6 @@ LIBRARY_APPS = [
     'django_celery_beat',
 ]
 
-
-
 INSTALLED_APPS = DJANGO_APPS + LIBRARY_APPS + CUSTOM_APPS
 
 MIDDLEWARE = [
@@ -165,6 +163,11 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'projects.emaktabuz.tasks.post_req',
         'schedule': timedelta(seconds=30),
     },
+    "backup_database_task":
+        {
+            "task": "central_system.tasks.backup_database_task",
+            "schedule": crontab(minute=0, hour=0),
+        },
 
 }
 # CELERY_QUEUES = {
@@ -185,6 +188,5 @@ CELERY_ACCEPT_CONTENT = ["application/json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
 CELERY_TIMEZONE = "Asia/Tashkent"
-
 
 WEBHOOK_URL = env.str("WEBHOOK_URL")
