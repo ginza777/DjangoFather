@@ -3,7 +3,8 @@ import time
 from celery import shared_task, Celery
 
 from .models import UserData
-from .views import send_msg_log, auto_post
+from central_system.views import send_msg_log
+from .views import  auto_post
 
 app = Celery('task', broker='redis://localhost:6379/0')
 

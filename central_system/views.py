@@ -15,7 +15,7 @@ def send_to_telegram(bot_token, chat_id, filename, caption):
     return response.json()
 
 
-@sync_to_async()
+
 def send_msg_log(message):
     # Define maximum length for each message chunk
     max_length = 4096

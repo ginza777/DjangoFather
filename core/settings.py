@@ -151,33 +151,32 @@ CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
 CELERY_BEAT_SCHEDULE = {
     'send-message-task': {
-        'task': 'projects.telegram_post_scrapper.tasks.send_message_task',
-        # every 10 seconds
-        'schedule': timedelta(seconds=30),
+        'task': 'projects.telegram_post_scrapper.tasks.send_message',
+        'schedule': timedelta(seconds=3),
     },
     'delete_message_task': {
         'task': 'projects.telegram_post_scrapper.tasks.delete_message',
-        'schedule': crontab(minute=0, hour=0),
+        'schedule': timedelta(seconds=5),
     },
-    'emaktab_task': {
+    'emaktab-task': {
         'task': 'projects.emaktabuz.tasks.post_req',
         'schedule': crontab(minute=0, hour=8),
     },
-    "backup_database_task":
+    "backup-database-task":
         {
             "task": "central_system.tasks.backup_database_task",
             "schedule": crontab(minute=0, hour=11),
         },
-    "webhook_info_task":
+    "webhook-info-task":
         {
             "task": "central_system.tasks.webhook_info_task",
-            "schedule": crontab(minute=0, hour=8, day_of_week=7),
+            "schedule": crontab(minute=0, hour=8, day_of_week=0),
 
         },
-    "set_webhook_task":
+    "set-webhook-task":
         {
             "task": "central_system.tasks.set_webhook_task",
-            "schedule": crontab(minute=0, hour=7, day_of_week=7),
+            "schedule": crontab(minute=0, hour=7, day_of_week=0),
         },
 }
 # CELERY_QUEUES = {

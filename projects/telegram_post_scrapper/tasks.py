@@ -7,7 +7,7 @@ from django.db.models import Q
 from django.utils import timezone
 
 from .models import Message, Filename,SomeErrors
-from .views import message_log_view, send_msg_log, send_message
+from .views import message_log_view, send_msg_log, send_messages
 
 app = Celery('task', broker='redis://localhost:6379/0')
 
@@ -66,8 +66,8 @@ def check_files_existence(message_id):
     return False
 
 
-@shared_task(name="send_message")
-def send_message_task():
+@shared_task
+def send_message():
     try:
         messages = Message.objects.filter(
             send_status=False,
@@ -77,11 +77,11 @@ def send_message_task():
         for message in messages:
             if check_photo_caption_with_count(message_id=message.message_id):
                 if check_files_existence(message_id=message.message_id):
-                    send_message(message_id=message.message_id)
+                    send_messages(message_id=message.message_id)
     except Exception as e:
         send_msg_log(f"telegram_post_scrapper:\nsend_message_task: {e}")
 
-@shared_task(name='delete_message')
+@shared_task
 def delete_message():
     # Bugungi sana olish
     today = timezone.now()

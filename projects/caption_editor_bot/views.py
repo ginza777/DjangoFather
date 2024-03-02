@@ -28,11 +28,11 @@ async def cap_killer(update: Update, context: CallbackContext):
             if not status:
                 message = "caption killer bot\n"+"adminga qo'shilmagan" + f"""\n{update.channel_post.sender_chat.title}\n{update.channel_post.sender_chat.type}\n{update.channel_post.sender_chat.id}"""
                 print(message)
-                await send_msg_log(message)
+                await sync_to_async(send_msg_log)(message)
         except Exception as e:
             logger.error(f"Error in start command: {e}")
             message = "caption killer bot\n" + f"Error in start command: {e}"
-            await send_msg_log(message)
+            await sync_to_async(send_msg_log)(message)
 
 
 @sync_to_async

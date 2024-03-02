@@ -274,7 +274,7 @@ def send_msg(data):
                          f"400 - {data['channel_from']} dan  {data['data']['chat_id']} ga  {data['message_id']} xabar yuborilmadi   error: {r.json()} time: {current_time}")
 
 
-def send_message(message_id):
+def send_messages(message_id):
     time.sleep(2)
     data_list = get_media_files_json_data(message_id)
     with ThreadPoolExecutor(max_workers=3) as executor:
