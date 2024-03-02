@@ -161,24 +161,23 @@ CELERY_BEAT_SCHEDULE = {
     },
     'emaktab_task': {
         'task': 'projects.emaktabuz.tasks.post_req',
-        'schedule': timedelta(seconds=30),
+        'schedule': crontab(minute=0, hour=8),
     },
     "backup_database_task":
         {
             "task": "central_system.tasks.backup_database_task",
-            "schedule": crontab(minute=0, hour=0),
+            "schedule": crontab(minute=0, hour=11),
         },
     "webhook_info_task":
         {
             "task": "central_system.tasks.webhook_info_task",
-            "schedule": crontab(minute=0, hour=0),
-            # no schedule
+            "schedule": crontab(minute=0, hour=8, day_of_week=7),
 
         },
     "set_webhook_task":
         {
             "task": "central_system.tasks.set_webhook_task",
-            "schedule": crontab(minute=0, hour=0),
+            "schedule": crontab(minute=0, hour=7, day_of_week=7),
         },
 }
 # CELERY_QUEUES = {
