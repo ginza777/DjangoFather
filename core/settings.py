@@ -48,6 +48,8 @@ CUSTOM_APPS = [
     "projects.chatgpt_bot",
     "projects.telegram_post_scrapper",
     "projects.emaktabuz",
+    "projects.tarjimon_bot",
+    "projects.caption_editor_bot",
 
 ]
 

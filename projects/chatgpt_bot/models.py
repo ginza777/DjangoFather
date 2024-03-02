@@ -40,8 +40,8 @@ class TelegramBot(models.Model):
         return self.name
 
     class Meta:
-        verbose_name = "Telegram Bot"
-        verbose_name_plural = "Telegram Bots"
+        verbose_name = "TelegramBot"
+        verbose_name_plural = "TelegramBot"
 
 
 class BackupSenderBot(models.Model):
@@ -58,6 +58,10 @@ class BackupSenderBot(models.Model):
                 self.channel_id = '-100' + self.channel_id
 
         super().save(*args, **kwargs)
+
+    class Meta:
+        verbose_name = "BackupBot"
+        verbose_name_plural = "BackupBot"
 
 
 class Chat_mode(models.Model):
@@ -76,8 +80,8 @@ class Chat_mode(models.Model):
         return self.model_name
 
     class Meta:
-        verbose_name = "Chat Mode"
-        verbose_name_plural = "Chat Modes"
+        verbose_name = "ChatMode"
+        verbose_name_plural = "ChatMode"
         db_table = "chat_mode"
 
 
@@ -89,8 +93,8 @@ class GptModels(models.Model):
         return self.model
 
     class Meta:
-        verbose_name = "Gpt Model"
-        verbose_name_plural = "Gpt Models"
+        verbose_name = "GptModel"
+        verbose_name_plural = "GptModel"
         db_table = "gpt_models"
 
 
@@ -120,7 +124,7 @@ class Subscribtion(models.Model):
 
     class Meta:
         verbose_name = "Subscribtion"
-        verbose_name_plural = "Subscribtions"
+        verbose_name_plural = "Subscribtion"
         db_table = "subscribtion"
 
 
@@ -135,8 +139,8 @@ class TokenPackage(models.Model):
         return self.name
 
     class Meta:
-        verbose_name = "Token Package"
-        verbose_name_plural = "Token Packages"
+        verbose_name = "TokenPackage"
+        verbose_name_plural = "TokenPackage"
         db_table = "token_package"
 
 
@@ -179,13 +183,14 @@ class TelegramProfile(models.Model):
         super(TelegramProfile, self).save(force_insert, force_update, using, update_fields)
 
     class Meta:
-        verbose_name = "ChatGpt User"
-        verbose_name_plural = "ChatGpt Users"
+        verbose_name = "User"
+        verbose_name_plural = "User"
 
 
 class Dialog(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
-    user = models.ForeignKey(TelegramProfile, on_delete=models.SET_NULL, verbose_name="ChatGpt User",null=True,blank=True)
+    user = models.ForeignKey(TelegramProfile, on_delete=models.SET_NULL, verbose_name="ChatGpt User", null=True,
+                             blank=True)
     chat_mode = models.ForeignKey(Chat_mode, on_delete=models.SET_NULL, null=True, blank=True)
     start_time = models.DateTimeField(auto_now_add=True)
     gpt_model = models.ForeignKey(GptModels, on_delete=models.SET_NULL, null=True, blank=True)
@@ -201,7 +206,7 @@ class Dialog(models.Model):
 
     class Meta:
         verbose_name = "Dialog"
-        verbose_name_plural = "Dialogs"
+        verbose_name_plural = "Dialog"
         db_table = "dialog"
 
 
@@ -222,8 +227,8 @@ class Messages_dialog(models.Model):
         super(Messages_dialog, self).save(force_insert, force_update, using, update_fields)
 
     class Meta:
-        verbose_name = "Messages Dialog"
-        verbose_name_plural = "Messages Dialogs"
+        verbose_name = "MessagesDialog"
+        verbose_name_plural = "MessagesDialog"
         db_table = "messages_dialog"
 
 
@@ -246,7 +251,7 @@ class Config(models.Model):
 
     class Meta:
         verbose_name = "Config"
-        verbose_name_plural = "Configs"
+        verbose_name_plural = "Config"
 
 
 class ChatGptTokens(models.Model):
@@ -256,6 +261,10 @@ class ChatGptTokens(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     status = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name = "GPTToken"
+        verbose_name_plural = "GPTToken"
 
 
 class LogSenderBot(models.Model):
@@ -272,3 +281,7 @@ class LogSenderBot(models.Model):
                 self.channel_id = '-100' + self.channel_id
 
         super().save(*args, **kwargs)
+
+    class Meta:
+        verbose_name = "LogBot"
+        verbose_name_plural = "LogBot"

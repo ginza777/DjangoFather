@@ -26,6 +26,8 @@ urlpatterns = [
     path('telegram-post-scrapper/', include("projects.telegram_post_scrapper.urls")),
     path("rosetta/", include("rosetta.urls")),
     path("chatgpt-bot/", include("projects.chatgpt_bot.urls")),
+    path("tarjimon-bot/", include("projects.tarjimon_bot.urls")),
+    path("caption-editor-bot/", include("projects.caption_editor_bot.urls")),
 
 ]
 urlpatterns += swagger_urlpatterns
