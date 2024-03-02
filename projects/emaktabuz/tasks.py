@@ -14,7 +14,7 @@ def post_req():
     time.sleep(10)
     users = UserData.objects.all()
     if users.count() == 0:
-        send_msg_log("No users found")
+        send_msg_log("emaktabuz:\nNo users found")
         return
     for user in users:
         try:

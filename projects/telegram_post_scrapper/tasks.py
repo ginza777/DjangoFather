@@ -85,7 +85,6 @@ def send_message():
 def delete_message():
     # Bugungi sana olish
     today = timezone.now()
-
     txt = f"delete_message: today={today}\n"
     txt_not = ''
     # Bir kun oldingi sana
