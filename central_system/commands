@@ -1,16 +1,26 @@
 
-
+#emaktab app
 #data load for emaktabuz...
 python manage.py emaktab_data
 
 =========================================================
-
+#telegram_post_scrapper app
 #data load for telegram_post_scrapper...
+
 python manage.py data
 
 =========================================================
-
+#telegram_post_scrapper app
 #run telegram client for telegram_post_scrapper...
+
+python manage.py post_scrapper_data
 python manage.py client
+
+=========================================================
+
+#chatgpt_bot
+#data load for chatgpt_bot...
+
+python manage.py chatgpt_data
 
 =========================================================

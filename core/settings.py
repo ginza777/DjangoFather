@@ -125,7 +125,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = "Asia/Tashkent"
+TIME_ZONE = "UTC"
 
 USE_I18N = True
 
@@ -168,7 +168,18 @@ CELERY_BEAT_SCHEDULE = {
             "task": "central_system.tasks.backup_database_task",
             "schedule": crontab(minute=0, hour=0),
         },
+    "webhook_info_task":
+        {
+            "task": "central_system.tasks.webhook_info_task",
+            "schedule": crontab(minute=0, hour=0),
+            # no schedule
 
+        },
+    "set_webhook_task":
+        {
+            "task": "central_system.tasks.set_webhook_task",
+            "schedule": crontab(minute=0, hour=0),
+        },
 }
 # CELERY_QUEUES = {
 #     'ads_manager_queue': {
@@ -188,5 +199,8 @@ CELERY_ACCEPT_CONTENT = ["application/json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
 CELERY_TIMEZONE = "Asia/Tashkent"
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+CELERY_BROKER_CONNECTION_RETRY = True
+DJANGO_CELERY_BEAT_TZ_AWARE = False
 
 WEBHOOK_URL = env.str("WEBHOOK_URL")

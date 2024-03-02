@@ -140,5 +140,5 @@ WantedBy=multi-user.target
 
 
 
-celery -A  EmaktabUz beat --loglevel=info  --scheduler django_celery_beat.schedulers:DatabaseScheduler
-celery -A  EmaktabUz worker -Q emaktab_queue --loglevel=info
+celery -A  core beat --loglevel=info  --scheduler django_celery_beat.schedulers:DatabaseScheduler
+celery -A  core worker  --loglevel=info

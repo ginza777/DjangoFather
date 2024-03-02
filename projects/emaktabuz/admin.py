@@ -1,14 +1,10 @@
 from django.contrib import admin
 
-from .models import LogSenderBot, UserData
+from .models import  UserData
 
 
 # Register your models here.
 
-
-@admin.register(LogSenderBot)
-class LogSenderBotAdmin(admin.ModelAdmin):
-    list_display = ("token", "channel_id",)
 
 
 @admin.register(UserData)
