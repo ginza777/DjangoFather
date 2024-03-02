@@ -66,7 +66,7 @@ def check_files_existence(message_id):
     return False
 
 
-# @shared_task(name="send_message",queue="ads_manager_queue")
+@shared_task(name="send_message")
 def send_message_task():
     try:
         messages = Message.objects.filter(
@@ -81,7 +81,7 @@ def send_message_task():
     except Exception as e:
         send_msg_log(f"telegram_post_scrapper:\nsend_message_task: {e}")
 
-@shared_task(name='delete_message', queue="ads_manager_queue")
+@shared_task(name='delete_message')
 def delete_message():
     # Bugungi sana olish
     today = timezone.now()

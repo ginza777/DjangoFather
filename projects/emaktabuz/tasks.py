@@ -8,7 +8,7 @@ from .views import send_msg_log, auto_post
 app = Celery('task', broker='redis://localhost:6379/0')
 
 
-@shared_task(queue="emaktab_queue")
+@shared_task()
 def post_req():
     time.sleep(10)
     users = UserData.objects.all()
