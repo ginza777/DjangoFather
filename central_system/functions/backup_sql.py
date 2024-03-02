@@ -4,8 +4,8 @@ import subprocess
 
 import environ
 
-from .models import LogSenderBot
-from .views import send_to_telegram, send_msg_log
+from central_system.models import LogSenderBot
+from central_system.views import send_to_telegram, send_msg_log
 
 env = environ.Env()
 env.read_env(".env")
@@ -46,3 +46,7 @@ def backup_database():
     except Exception as e:
         # all files finish with .sqlite3
         send_msg_log(f"Central system backup\nError occurred while executing command: {e}")
+
+
+
+__all__ = ["backup_database"]

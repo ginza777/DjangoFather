@@ -104,7 +104,7 @@ class Channels(models.Model):
         if not self.my_channel:
             self.bot = None
         if self.my_channel and self.bot is not None:
-            res = send_message_for_model('Hello', self.bot.bot_token, self.channel_id)
+            res = send_message_for_model('.', self.bot.bot_token, self.channel_id)
             if not res:
                 raise ValidationError('This bot did not send message to this channel')
         if self.type is None:
