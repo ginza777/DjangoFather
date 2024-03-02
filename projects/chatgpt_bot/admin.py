@@ -11,7 +11,7 @@ from .models import (
     Messages_dialog,
     Subscribtion,
     TextModel,
-    TokenPackage, ChatGptTokens, LogSenderBot,TelegramBot
+    TokenPackage, ChatGptTokens, TelegramBot
 )
 
 
@@ -33,7 +33,7 @@ class TokenPackageAdmin(admin.ModelAdmin):
 @admin.register(TelegramProfile)
 class ChatGptUserAdmin(admin.ModelAdmin):
     list_display = (
-    "id", "telegram_id", "last_interaction", "current_chat_mode", "current_model", "daily_limit", "extra_limit")
+        "id", "telegram_id", "last_interaction", "current_chat_mode", "current_model", "daily_limit", "extra_limit")
     filter_horizontal = ("bot",)
 
 
@@ -88,10 +88,6 @@ class GptModelsAdmin(admin.ModelAdmin):
 class ChatGptTokensAdmin(admin.ModelAdmin):
     list_display = ("token",)
 
-
-@admin.register(LogSenderBot)
-class LogSenderBotAdmin(admin.ModelAdmin):
-    list_display = ("id", "token", "channel_id",)
 
 @admin.register(TelegramBot)
 class LogSenderBotAdmin(admin.ModelAdmin):

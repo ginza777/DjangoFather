@@ -4,7 +4,7 @@ from asgiref.sync import sync_to_async
 from telegram import Update
 from telegram.ext import CallbackContext
 from .models import Keyword, Channel
-from ..chatgpt_bot.views import send_msg_log
+from central_system.views import send_msg_log
 
 logger = logging.getLogger(__name__)
 

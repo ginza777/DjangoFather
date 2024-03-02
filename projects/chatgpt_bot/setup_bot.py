@@ -1,6 +1,6 @@
 import os
 
-from projects.chatgpt_bot.bot_functions import (
+from projects.chatgpt_bot.views import (
     help,
     language_choice_handle,
     message_handle,
