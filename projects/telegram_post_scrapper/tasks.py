@@ -68,16 +68,18 @@ def check_files_existence(message_id):
 
 # @shared_task(name="send_message",queue="ads_manager_queue")
 def send_message_task():
-    messages = Message.objects.filter(
-        send_status=False,
-        delete_status=False,
-        channel_from__isnull=False  # Filter qo'shildi
-    )
-    for message in messages:
-        if check_photo_caption_with_count(message_id=message.message_id):
-            if check_files_existence(message_id=message.message_id):
-                send_message(message_id=message.message_id)
-
+    try:
+        messages = Message.objects.filter(
+            send_status=False,
+            delete_status=False,
+            channel_from__isnull=False  # Filter qo'shildi
+        )
+        for message in messages:
+            if check_photo_caption_with_count(message_id=message.message_id):
+                if check_files_existence(message_id=message.message_id):
+                    send_message(message_id=message.message_id)
+    except Exception as e:
+        send_msg_log(f"telegram_post_scrapper:\nsend_message_task: {e}")
 
 @shared_task(name='delete_message', queue="ads_manager_queue")
 def delete_message():

@@ -1,5 +1,5 @@
 import datetime
-
+import time
 from celery import shared_task, Celery
 
 from .models import UserData
@@ -10,9 +10,11 @@ app = Celery('task', broker='redis://localhost:6379/0')
 
 @shared_task(queue="emaktab_queue")
 def post_req():
-    # time.sleep(10)
+    time.sleep(10)
     users = UserData.objects.all()
-    print("users..", users)
+    if users.count() == 0:
+        send_msg_log("No users found")
+        return
     for user in users:
         try:
             response = auto_post(user.login, user.password)
