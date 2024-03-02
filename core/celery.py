@@ -8,7 +8,7 @@ env = environ.Env()
 environ.Env.read_env()
 
 # Set the default Django settings module
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", env.str("DJANGO_SETTINGS_MODULE"))
 
 # Create a Celery instance
 app = Celery("core")
