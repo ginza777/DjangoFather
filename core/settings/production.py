@@ -4,7 +4,7 @@ from .base import *  # noqa
 # General
 ###################################################################
 
-DEBUG = False
+DEBUG = env.bool("DEBUG")
 
 ###################################################################
 # Django security
@@ -17,7 +17,7 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 
 
-CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = False
 CSRF_TRUSTED_ORIGINS = ["https://crm.sherzamon.cloud","http://crm.sherzamon.cloud"]
 
 ###################################################################
