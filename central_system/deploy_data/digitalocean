@@ -82,6 +82,7 @@ sudo systemctl restart djangofather
 
 
 openssl genpkey -algorithm RSA -out /etc/letsencrypt/live/crm.sherzamon.cloud/privkey.pem -pkeyopt rsa_keygen_bits:2048
+openssl genpkey -algorithm RSA -out /etc/letsencrypt/live/crm.sherzamon.cloud/fullchain.pem -pkeyopt rsa_keygen_bits:2048
 
 
 sudo nano /etc/nginx/sites-available/crm.sherzamon.cloud
@@ -89,11 +90,9 @@ sudo nano /etc/nginx/sites-available/crm.sherzamon.cloud
 
 
 server {
-    listen 443 ssl;
+    listen 80;
     server_name crm.sherzamon.cloud;
 
-    ssl_certificate /etc/letsencrypt/live/crm.sherzamon.cloud/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/crm.sherzamon.cloud/privkey.pem;
 
 
     location = /favicon.ico { access_log off; log_not_found off; }

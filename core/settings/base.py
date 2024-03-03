@@ -10,8 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
-from datetime import timedelta
 from pathlib import Path
+import os
+from datetime import timedelta
 
 import environ
 from celery.schedules import crontab
@@ -131,6 +132,7 @@ USE_TZ = True
 STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "static"
 STATICFILES_DIRS = (BASE_DIR / "staticfiles",)
+
 
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
