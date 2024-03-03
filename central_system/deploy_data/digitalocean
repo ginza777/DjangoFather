@@ -20,8 +20,8 @@ sudo apt install python3-venv python3-dev libpq-dev postgresql postgresql-contri
 
 sudo -u postgres psql
 
-CREATE DATABASE djangofather;
-CREATE USER postgres WITH PASSWORD 'postgres'; ;
+CREATE DATABASE django_father;
+CREATE USER postgres WITH PASSWORD 'postgres';
 ALTER USER postgres WITH PASSWORD  'postgres';
 ALTER ROLE postgres SET client_encoding TO 'utf8';
 ALTER ROLE postgres SET default_transaction_isolation TO 'read committed';
@@ -94,13 +94,13 @@ openssl genpkey -algorithm RSA -out /etc/letsencrypt/live/crm.sherzamon.cloud/pr
 openssl genpkey -algorithm RSA -out /etc/letsencrypt/live/crm.sherzamon.cloud/fullchain.pem -pkeyopt rsa_keygen_bits:2048
 
 
-sudo nano /etc/nginx/sites-available/crm.sherzamon.cloud
+sudo nano /etc/nginx/sites-available/sherzamon.cloud
 
 
 
 server {
     listen 80;
-    server_name crm.sherzamon.cloud;
+    server_name sherzamon.cloud;
 
 
 
@@ -117,7 +117,7 @@ server {
 
 
 
-sudo ln -s /etc/nginx/sites-available/crm.sherzamon.cloud /etc/nginx/sites-enabled
+sudo ln -s /etc/nginx/sites-available/sherzamon.cloud /etc/nginx/sites-enabled
 sudo nginx -t
 sudo systemctl restart nginx
 journalctl -xeu nginx.service
@@ -129,11 +129,7 @@ journalctl -xeu nginx.service
 #certbot
 
 sudo apt install certbot python3-certbot-nginx
-sudo certbot --nginx -d crm.sherzamon.cloud
-sudo python3.10 /usr/local/bin/certbot --nginx -d sherzamon.cloud
-
-sudo certbot --nginx -d emaktab.sherzamon.cloud --rsa-key-size 2048
-
+sudo certbot --nginx -d sherzamon.cloud
 sudo systemctl status certbot.timer
 sudo certbot renew --dry-run
 
@@ -148,7 +144,7 @@ After=network.target
 [Service]
 Type=simple
 WorkingDirectory=/var/projects/DjangoFather/DjangoFather
-ExecStart=/bin/bash -c '/var/projects/DjangoFather/env/bin/celery -A core beat --loglevel=info --scheduler django_celery_beat.schedulers:DatabaseScheduler'
+ExecStart=/bin/bash -c '/var/projects/DjangoFather/env/bin/celery -A core beat --loglevel=info '
 Restart=always
 User=root
 
