@@ -2,37 +2,16 @@ import asyncio
 import traceback
 
 import django.core.exceptions
-import environ
+
 import requests.exceptions
 import telegram
 from asgiref.sync import sync_to_async
 from django.apps import AppConfig
-from django.db import connection
+
 from django.db.utils import ProgrammingError
 
 from .utils.bot import set_webhook
 
-env = environ.Env()
-environ.Env.read_env()
-
-@sync_to_async
-def create_superuser():
-    if "auth_user" in connection.introspection.table_names():
-        username = env.str("SUPERUSER_USERNAME") or "sherzamon"
-        email = env.str("SUPERUSER_EMAIL") or "sherzamon@gmail.com"
-        password = env.str("SUPERUSER_PASSWORD") or "sherzAmon20001A"
-        try:
-            from django.contrib.auth.models import User
-
-            # Check if the user already exists
-            if not User.objects.filter(username=username).exists():
-                # Create a new superuser
-                User.objects.create_superuser(username, email, password)
-                print(f"Superuser '{username}' created successfully.")
-            else:
-                print(f"Superuser '{username}' already exists.")
-        except ProgrammingError:
-            print("you must migrate")
 
 
 class ChatgptBotConfig(AppConfig):
@@ -40,12 +19,10 @@ class ChatgptBotConfig(AppConfig):
     name = "projects.chatgpt_bot"
 
     def ready(self):
-        # call_command('migrate', interactive=False)
-        asyncio.run(create_superuser())
         asyncio.run(self.setup_webhook())
 
     async def setup_webhook(self):
-        print("setup_webhook...")
+        print("setup webhook chatgpt bot...")
         try:
             bot_tokens = await self.get_bot_tokens()
             print("bot_tokens: ", bot_tokens)

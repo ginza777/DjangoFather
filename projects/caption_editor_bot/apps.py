@@ -2,7 +2,6 @@ import asyncio
 import traceback
 
 import django.core.exceptions
-import environ
 import requests.exceptions
 import telegram
 from asgiref.sync import sync_to_async
@@ -11,8 +10,7 @@ from django.db.utils import ProgrammingError
 
 from .utils.bot import set_webhook
 
-env = environ.Env()
-environ.Env.read_env()
+
 
 
 class ChatgptBotConfig(AppConfig):
@@ -20,11 +18,10 @@ class ChatgptBotConfig(AppConfig):
     name = "projects.caption_editor_bot"
 
     def ready(self):
-        # call_command('migrate', interactive=False)
         asyncio.run(self.setup_webhook())
 
     async def setup_webhook(self):
-        print("setup_webhook...")
+        print("setup webhook caption editor bot...")
         try:
             bot_tokens = await self.get_bot_tokens()
             print("bot_tokens: ", bot_tokens)

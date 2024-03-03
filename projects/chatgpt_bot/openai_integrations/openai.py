@@ -2,7 +2,6 @@ import logging
 import uuid
 from datetime import datetime
 
-import environ
 import openai
 from asgiref.sync import sync_to_async
 from telegram.constants import ParseMode
@@ -12,8 +11,6 @@ from projects.chatgpt_bot.models import Dialog, Messages_dialog
 from projects.chatgpt_bot.openai_integrations.token_calculator import num_tokens_from_messages
 from central_system.views import send_msg_log
 
-env = environ.Env()
-environ.Env.read_env()
 
 # logging
 logger = logging.getLogger(__name__)
