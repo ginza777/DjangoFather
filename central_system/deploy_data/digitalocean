@@ -21,13 +21,14 @@ sudo apt install python3-venv python3-dev libpq-dev postgresql postgresql-contri
 sudo -u postgres psql
 
 CREATE DATABASE djangofather;
-CREATE USER sherzamon WITH PASSWORD 'postgres'; ;
+CREATE USER postgres WITH PASSWORD 'postgres'; ;
+ALTER USER postgres WITH PASSWORD  'postgres';
+ALTER ROLE postgres SET client_encoding TO 'utf8';
+ALTER ROLE postgres SET default_transaction_isolation TO 'read committed';
+ALTER ROLE postgres SET timezone TO 'UTC';
+GRANT CREATE ON SCHEMA public TO postgres;
 
-ALTER ROLE sherzamon SET client_encoding TO 'utf8';
-ALTER ROLE sherzamon SET default_transaction_isolation TO 'read committed';
-ALTER ROLE sherzamon SET timezone TO 'UTC';
-
-GRANT ALL PRIVILEGES ON DATABASE djangofather TO sherzamon;
+GRANT ALL PRIVILEGES ON DATABASE djangofather TO postgres;
 \q
 
 
