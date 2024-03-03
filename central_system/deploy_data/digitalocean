@@ -2,7 +2,15 @@
 /var/projects/DjangoFather/env
 /var/projects/DjangoFather/DjangoFather
 
-
+sudo apt update
+sudo apt install nginx
+sudo systemctl enable nginx
+sudo systemctl start nginx
+sudo systemctl status nginx
+sudo nginx -t
+sudo systemctl restart nginx
+apt install python3-virtualenv
+apt install redis-server
 
 
 
