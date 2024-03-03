@@ -1,0 +1,105 @@
+{
+  "central_system": {
+    "log_sender_bot": {
+      "token": "6567332198:AAHRaGT5xLJdsJbWkugqgSJHbPGi8Zr2_ZI",
+      "channel_id": "-1002120483646",
+      "channel_name": "Logs& Problems bot"
+    },
+    "backup_bot": {
+      "token": "6567332198:AAHRaGT5xLJdsJbWkugqgSJHbPGi8Zr2_ZI",
+      "channel_id": "-1002041724232",
+      "channel_name": "Backup db"
+    },
+    "caption_editor_bot": {
+      "bot": {
+        "token": "7121286690:AAGCEKeBvUKKb_K5kkaXnruJq2BAOVUg3-k"
+      },
+      "channels": [
+        {
+          "name": "Hacker_lab",
+          "channel_id": "-1001890212002",
+          "link": "https://t.me/+n7WWWWz98eFmNTRi",
+          "keywords": [
+            "https://t.me/Crack996"
+          ]
+        },
+        {
+          "name": "Foydali botlar",
+          "channel_id": "-1001704510900",
+          "link": "https://t.me/Foydaliibotlar",
+          "keywords": []
+        },
+        {
+          "name": "Programmer's Note",
+          "channel_id": "-1001989777503",
+          "link": "https://t.me/Programmers_Notes_hub",
+          "keywords": []
+        },
+        {
+          "name": "Pc games-apps-crack",
+          "channel_id": "-1001908688102",
+          "link": "https://t.me/pc_crack_apps",
+          "keywords": []
+        },
+        {
+          "name": "Ubuntu_store",
+          "channel_id": "-1001901370373",
+          "link": "@Ubuntu_store",
+          "keywords": []
+        },
+        {
+          "name": "Ubuntu | Kali Linux",
+          "channel_id": "-1001986179372",
+          "link": "@ubuntu_softt",
+          "keywords": []
+        },
+        {
+          "name": "Glamour music 🎧",
+          "channel_id": "-1001729770459",
+          "link": "@Glamourmusicc",
+          "keywords": [
+            "@YouTubedanYuklovchiBot",
+            "@AvtoBass_Music",
+            "ɪ ᴛ ᴀ ʟ ɪ ᴀ ɴ s ᴋ ɪ ᴇ",
+            "@TubeHunter_Bot",
+            "@Tinglabot - Istagan musiqangizni tez va onson toping!",
+            "@Gozilla_bot"
+          ]
+        },
+        {
+          "name": "Android crack | Aptoidè | HappyMod",
+          "channel_id": "-1002122221669",
+          "link": "@android_crack_store",
+          "keywords": []
+        },
+        {
+          "name": "IOS store",
+          "channel_id": "-1001814135298",
+          "link": "@App_ios_store",
+          "keywords": [
+            "https://t.me/Crack996"
+          ]
+        }
+      ]
+    },
+    "chatgpt_bot": [
+      "6722658210:AAGLrJO6r0Mc18rKSCH7PrFLdVUGyW13acc",
+      "6927875443:AAHRmnW4pbX1QSi-4Qd-qA5L2DvT5fgi0vE",
+      "6851457617:AAF7c3SGsmsw7x3TzeNvNOxMFdz2jbxtnXo",
+      "7109266138:AAHm29dlPsiSV6HMvpUHZXG8gl8aP0xe9z0",
+      "6826324839:AAEx-OyEYEX3AcbOcuPcWz6Vt_T4956_Ejc",
+      "6301012693:AAE8R0YuiI2FEJtJGRZAqDYief0S2EhlQa0",
+      "7143197368:AAFsDhSocpPgXuhdyvAz8sgdLho71BFr3mQ",
+      "6583031063:AAEqXsMOj2zJbU2AY_yNlwAX3CgB6gZ0RXU"
+    ],
+    "emaktabuz_bot": {
+      "channel_name": "Yo'qlama",
+      "channel_id": "-1002126638542",
+      "token": "6567332198:AAHRaGT5xLJdsJbWkugqgSJHbPGi8Zr2_ZI"
+    },
+    "tarjimon_bot": [
+      "6910279150:AAExvpaDXjcY24iuHabWb_9ehdQBvVG645U",
+      "6847869522:AAHcm-Wundto8zim-YUmtF1WWvjb7LkQ50Q"
+    ]
+  }
+}

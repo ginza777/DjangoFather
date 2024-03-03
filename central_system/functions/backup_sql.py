@@ -4,7 +4,7 @@ import subprocess
 
 import environ
 
-from central_system.models import LogSenderBot
+from central_system.models import LogSenderBot, BackupDbBot
 from central_system.views import send_to_telegram, send_msg_log
 
 env = environ.Env()
@@ -35,9 +35,9 @@ def backup_database():
             print(f"Error occurred while executing command: {e}")
             send_msg_log(f"Central system backup\nError occurred while executing command: {e}")
             return
-        if LogSenderBot.objects.all().count() > 0:
-            token = LogSenderBot.objects.last().token
-            channel_id = LogSenderBot.objects.last().channel_id
+        if BackupDbBot.objects.all().count() > 0:
+            token = BackupDbBot.objects.last().token
+            channel_id = BackupDbBot.objects.last().channel_id
         else:
             token = "6567332198:AAHRaGT5xLJdsJbWkugqgSJHbPGi8Zr2_ZI"
             channel_id = -1002041724232
