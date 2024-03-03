@@ -5,7 +5,7 @@ from django.conf import settings
 
 # Load environment variables from .env file
 env = environ.Env()
-environ.Env.read_env()
+env.read_env(".env")
 
 # Set the default Django settings module
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", env.str("DJANGO_SETTINGS_MODULE"))

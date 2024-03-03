@@ -105,7 +105,7 @@ def get_user_message_count(chat_gpt_user):
 def get_openai_key():
     import environ
     env = environ.Env()
-    environ.Env.read_env()
+    env.read_env(".env")
     if ChatGptTokens.objects.all().count() > 0:
         token = ChatGptTokens.objects.last().token
     else:

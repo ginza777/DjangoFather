@@ -3,10 +3,32 @@
 /var/projects/DjangoFather/DjangoFather
 
 
-python manage.py migrate
+
+
+
+
+sudo apt update
+sudo apt install python3-venv python3-dev libpq-dev postgresql postgresql-contrib nginx curl
+
+sudo -u postgres psql
+
+CREATE DATABASE djangofather;
+CREATE USER sherzamon WITH PASSWORD 'postgres'; ;
+
+ALTER ROLE sherzamon SET client_encoding TO 'utf8';
+ALTER ROLE sherzamon SET default_transaction_isolation TO 'read committed';
+ALTER ROLE sherzamon SET timezone TO 'UTC';
+
+GRANT ALL PRIVILEGES ON DATABASE djangofather TO sherzamon;
+\q
+
+
+pip install -r requirements
+mkdir staticfiles
 python manage.py collectstatic
+pip install --upgrade setuptools
+python manage.py migrate
 python manage.py createsuperuser
-pip install gunicorn
 
 sudo nano /etc/systemd/system/djangofather.socket
 
@@ -54,12 +76,25 @@ sudo journalctl -u djangofather
 sudo systemctl daemon-reload
 sudo systemctl restart djangofather
 
-sudo nano /etc/nginx/sites-available/sherzamon.cloud
+
+
+
+
+
+openssl genpkey -algorithm RSA -out /etc/letsencrypt/live/crm.sherzamon.cloud/privkey.pem -pkeyopt rsa_keygen_bits:2048
+
+
+sudo nano /etc/nginx/sites-available/crm.sherzamon.cloud
+
 
 
 server {
-    listen 80;
-    server_name sherzamon.cloud  www.sherzamon.cloud;
+    listen 443 ssl;
+    server_name crm.sherzamon.cloud;
+
+    ssl_certificate /etc/letsencrypt/live/crm.sherzamon.cloud/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/crm.sherzamon.cloud/privkey.pem;
+
 
     location = /favicon.ico { access_log off; log_not_found off; }
     location /static/ {
@@ -74,7 +109,7 @@ server {
 
 
 
-sudo ln -s /etc/nginx/sites-available/sherzamon.cloud /etc/nginx/sites-enabled
+sudo ln -s /etc/nginx/sites-available/crm.sherzamon.cloud /etc/nginx/sites-enabled
 sudo nginx -t
 sudo systemctl restart nginx
 journalctl -xeu nginx.service
@@ -86,12 +121,9 @@ journalctl -xeu nginx.service
 #certbot
 
 sudo apt install certbot python3-certbot-nginx
-sudo nano /etc/nginx/sites-available/sherzamon.cloud
-sudo nginx -t
-sudo systemctl reload nginx
-sudo certbot --nginx -d sherzamon.cloud
-sudo python3.10 /usr/local/bin/certbot --nginx -d sherzamon.cloud -d www.sherzamon.cloud
-sudo certbot --nginx -d emaktab.sherzamon.cloud --rsa-key-size 2048
+sudo certbot --nginx -d crm.sherzamon.cloud
+sudo python3.10 /usr/local/bin/certbot --nginx -d sherzamon.cloud
+
 sudo certbot --nginx -d emaktab.sherzamon.cloud --rsa-key-size 2048
 
 sudo systemctl status certbot.timer
@@ -135,6 +167,14 @@ User=root
 [Install]
 WantedBy=multi-user.target
 
+
+sudo systemctl start djangofather_beat
+sudo systemctl enable djangofather_beat
+sudo systemctl status djangofather_beat
+
+sudo systemctl start djangofather_worker
+sudo systemctl enable djangofather_worker
+sudo systemctl status djangofather_worker
 
 
 
