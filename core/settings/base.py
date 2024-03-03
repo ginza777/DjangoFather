@@ -183,11 +183,11 @@ CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 CELERY_BEAT_SCHEDULE = {
     'send-message-task': {
         'task': 'projects.telegram_post_scrapper.tasks.send_message',
-        'schedule': timedelta(seconds=3),
+        'schedule': timedelta(days=1),
     },
     'delete_message_task': {
         'task': 'projects.telegram_post_scrapper.tasks.delete_message',
-        'schedule': timedelta(seconds=5),
+        'schedule': timedelta(days=2),
     },
     'emaktab-task': {
         'task': 'projects.emaktabuz.tasks.post_req',
