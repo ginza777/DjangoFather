@@ -3,11 +3,7 @@
 #data load for emaktabuz...
 python manage.py emaktab_data
 
-=========================================================
-#telegram_post_scrapper app
-#data load for telegram_post_scrapper...
 
-python manage.py data
 
 =========================================================
 #telegram_post_scrapper app
