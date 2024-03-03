@@ -47,6 +47,7 @@ DJANGO_APPS = [
 
 CUSTOM_APPS = [
     "central_system",
+    "projects.common",
     "projects.chatgpt_bot",
     "projects.telegram_post_scrapper",
     "projects.emaktabuz",

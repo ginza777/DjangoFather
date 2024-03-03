@@ -5,7 +5,7 @@ from .models import TelegramProfile, TelegramBot
 
 @admin.register(TelegramProfile)
 class TranslatorUserAdmin(admin.ModelAdmin):
-    list_display = ("telegram_id", "native_language", "target_language")
+    list_display = ("first_name","last_name","username","language","telegram_id","user_token","is_bot",)
 
 
 @admin.register(TelegramBot)
