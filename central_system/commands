@@ -30,3 +30,6 @@ python manage.py chatgpt_data
 python manage.py post_scrapper_data
 python manage.py emaktab_data
 python manage.py client
+
+
+sudo journalctl -u djangofather --lines 50

@@ -44,7 +44,8 @@ def get_member(func):
 
 
         bot = await models.TelegramBot.objects.aget(bot_username=context.bot.username)
-
+        current_model = await models.GptModels.objects.aget(model="gpt-3.5-turbo-16k")
+        current_chat_mode = await models.Chat_mode.objects.aget(key="assistant")
         language_code = update.effective_user.language_code
         try:
             selected_language = models.Language(language_code)
@@ -69,10 +70,14 @@ def get_member(func):
             user.last_name = last_name
             user.username = username
             user.language = selected_language
+            user.current_chat_mode = current_chat_mode
+            user.current_model = current_model
             await database_sync_to_async(user.bot.add)(bot)
             await user.asave()
         else:
             user.language = selected_language
+            user.current_chat_mode = current_chat_mode
+            user.current_model = current_model
             await database_sync_to_async(user.bot.add)(bot)
             await user.asave()
         activate("en")

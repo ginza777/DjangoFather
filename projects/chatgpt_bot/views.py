@@ -214,7 +214,7 @@ async def process_user_message(update, context, chat_gpt_user, text, model_name,
 
 @get_member
 async def message_handle(update: Update, context: CallbackContext, chat_gpt_user: TelegramProfile, *args, **kwargs):
-    if chat_gpt_user.chat_id != 548115215:
+    if chat_gpt_user.telegram_id != 548115215:
         if not await is_bot_mentioned(update, context):
             return
 
