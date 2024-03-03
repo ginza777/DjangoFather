@@ -147,7 +147,7 @@ def generate_prompt(user, message, bot_name):
 async def send_message_stream(message, model_name, chat_token, user, update, context, random_token, *args, **kwargs):
     openai_key = await get_openai_key()
     openai.api_key = openai_key
-
+    print("openai_key: ", openai_key)
     def _postprocess_answer(answer):
         answer = answer.strip()
         return answer
@@ -182,11 +182,11 @@ async def send_message_stream(message, model_name, chat_token, user, update, con
                 timeout=600,
             )
             answer = ""
-            i = 1
             for r_item in r_gen:
                 delta = r_item.choices[0].delta
                 if "content" in delta:
                     answer += delta.content
+                    print("answer: ", answer)
 
             await context.bot.edit_message_text(
                 chat_id=update.message.chat_id,
@@ -194,7 +194,6 @@ async def send_message_stream(message, model_name, chat_token, user, update, con
                 message_id=msg_dot.message_id,
                 parse_mode=ParseMode.MARKDOWN,
             )
-            print("answer: ", answer)
             input_message = messages
             output_message = [{"role": "assistant", "content": answer}]
 

@@ -16,13 +16,16 @@ Telethon
 django-environ
 gunicorn
 redis
-tiktoken
-openai
-python-dotenv
-pydub
 celery
 django-celery-beat
 django-celery-results
 setuptools
 
 ipython
+python-dotenv~=1.0.0
+pydub~=0.25.1
+tiktoken==0.5.2
+openai==0.28.0
+requests~=2.31.0
+google-cloud-translate
+

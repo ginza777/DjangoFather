@@ -31,7 +31,7 @@ class TokenPackageAdmin(admin.ModelAdmin):
 
 
 @admin.register(TelegramProfile)
-class ChatGptUserAdmin(admin.ModelAdmin):
+class TelegramProfileUserAdmin(admin.ModelAdmin):
     list_display = (
         "id", "telegram_id", "last_interaction", "current_chat_mode", "current_model", "daily_limit", "extra_limit")
     filter_horizontal = ("bot",)

@@ -21,8 +21,8 @@ def send_msg_log(message):
     token, chat_id = None, None
     if LogSenderBot.objects.all().count() > 0:
         token = LogSenderBot.objects.last().token
+        chat_id = LogSenderBot.objects.last().channel_id
     else:
-        LogSenderBot.objects.create(token="6567332198:AAHRaGT5xLJdsJbWkugqgSJHbPGi8Zr2_ZI", channel_id=-1002120483646)
         token = "6567332198:AAHRaGT5xLJdsJbWkugqgSJHbPGi8Zr2_ZI"
         chat_id = -1002120483646
 

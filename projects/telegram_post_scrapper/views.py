@@ -74,6 +74,7 @@ def send_msg_log(message):
 
     if LogSenderBot.objects.all().count() > 0:
         token = LogSenderBot.objects.last().bot_token
+
     else:
         token = "6567332198:AAHRaGT5xLJdsJbWkugqgSJHbPGi8Zr2_ZI"
     chat_id = -1002120483646
@@ -92,8 +93,8 @@ def send_msg_log(message):
             'parse_mode': 'HTML'
         }
         r = requests.post(url, data=params)
-        print("r: ", r.status_code)
-        print("r: ", r.text)
+        print("send_msg_log: r: ", r.status_code)
+        print("send_msg_log: r: ", r.text)
         if r.status_code != 200:
             return False
 
