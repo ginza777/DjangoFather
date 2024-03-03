@@ -1,6 +1,6 @@
 
-/var/projects/emaktabuz/env
-/var/projects/emaktabuz/EmaktabUz
+/var/projects/DjangoFather/env
+/var/projects/DjangoFather/DjangoFather
 
 
 python manage.py migrate
@@ -8,73 +8,73 @@ python manage.py collectstatic
 python manage.py createsuperuser
 pip install gunicorn
 
-sudo nano /etc/systemd/system/emaktab.socket
+sudo nano /etc/systemd/system/djangofather.socket
 
 [Unit]
 Description=gunicorn socket
 
 [Socket]
-ListenStream=/run/emaktab.sock
+ListenStream=/run/djangofather.sock
 
 [Install]
 WantedBy=sockets.target
 
 
-sudo nano /etc/systemd/system/emaktab.service
+sudo nano /etc/systemd/system/djangofather.service
 
 
 [Unit]
 Description=gunicorn daemon
-Requires=emaktab.socket
+Requires=djangofather.socket
 After=network.target
 
 [Service]
 User=root
 Group=www-data
-WorkingDirectory=/var/projects/emaktabuz/EmaktabUz
-ExecStart=/var/projects/emaktabuz/env/bin/gunicorn \
+WorkingDirectory=/var/projects/DjangoFather/DjangoFather
+ExecStart=/var/projects/DjangoFather/env/bin/gunicorn \
           --access-logfile - \
-          --workers 4 \
+          --workers 8 \
           --bind unix:/run/emaktab.sock \
-          EmaktabUz.wsgi:application
+          core.wsgi:application
 
 [Install]
 WantedBy=multi-user.target
 
 
-sudo systemctl start emaktab.socket
-sudo systemctl enable emaktab.socket
-sudo systemctl status emaktab.socket
+sudo systemctl start djangofather.socket
+sudo systemctl enable djangofather.socket
+sudo systemctl status djangofather.socket
 
-file /run/emaktab.sock
-sudo journalctl -u ads.socket
-curl --unix-socket /run/emaktab.sock localhost
-sudo journalctl -u emaktab
+file /run/djangofather.sock
+sudo journalctl -u djangofather.socket
+curl --unix-socket /run/djangofather.sock localhost
+sudo journalctl -u djangofather
 
 sudo systemctl daemon-reload
-sudo systemctl restart emaktab
+sudo systemctl restart djangofather
 
-sudo nano /etc/nginx/sites-available/emaktab.sherzamon.cloud
+sudo nano /etc/nginx/sites-available/sherzamon.cloud
 
 
 server {
     listen 80;
-    server_name emaktab.sherzamon.cloud;
+    server_name sherzamon.cloud  www.sherzamon.cloud;
 
     location = /favicon.ico { access_log off; log_not_found off; }
     location /static/ {
-        root /var/projects/emaktabuz/EmaktabUz;
+        root /var/projects/DjangoFather/DjangoFather;
     }
 
     location / {
         include proxy_params;
-        proxy_pass http://unix:/run/emaktab.sock;
+        proxy_pass http://unix:/run/djangofather.sock;
     }
 }
 
 
 
-sudo ln -s /etc/nginx/sites-available/emaktab.sherzamon.cloud /etc/nginx/sites-enabled
+sudo ln -s /etc/nginx/sites-available/sherzamon.cloud /etc/nginx/sites-enabled
 sudo nginx -t
 sudo systemctl restart nginx
 journalctl -xeu nginx.service
@@ -86,11 +86,11 @@ journalctl -xeu nginx.service
 #certbot
 
 sudo apt install certbot python3-certbot-nginx
-sudo nano /etc/nginx/sites-available/emaktab.sherzamon.cloud
+sudo nano /etc/nginx/sites-available/sherzamon.cloud
 sudo nginx -t
 sudo systemctl reload nginx
-sudo certbot --nginx -d emaktab.sherzamon.cloud
-sudo python3.10 /usr/local/bin/certbot --nginx -d emaktab.sherzamon.cloud
+sudo certbot --nginx -d sherzamon.cloud
+sudo python3.10 /usr/local/bin/certbot --nginx -d sherzamon.cloud -d www.sherzamon.cloud
 sudo certbot --nginx -d emaktab.sherzamon.cloud --rsa-key-size 2048
 sudo certbot --nginx -d emaktab.sherzamon.cloud --rsa-key-size 2048
 
@@ -99,16 +99,16 @@ sudo certbot renew --dry-run
 
 
 
-sudo nano /etc/systemd/system/emaktab_beat.service
+sudo nano /etc/systemd/system/djangofather_beat.service
 
 [Unit]
-Description=Celery EmaktabUz Beat Scheduler
+Description=Celery Djangofather Beat Scheduler
 After=network.target
 
 [Service]
 Type=simple
-WorkingDirectory=/var/projects/emaktabuz/EmaktabUz
-ExecStart=/bin/bash -c '/var/projects/emaktabuz/env/bin/celery -A EmaktabUz beat --loglevel=info --scheduler django_celery_beat.schedulers:DatabaseScheduler'
+WorkingDirectory=/var/projects/DjangoFather/DjangoFather
+ExecStart=/bin/bash -c '/var/projects/DjangoFather/env/bin/celery -A core beat --loglevel=info --scheduler django_celery_beat.schedulers:DatabaseScheduler'
 Restart=always
 User=root
 
@@ -119,16 +119,16 @@ WantedBy=multi-user.target
 
 
 
-sudo nano /etc/systemd/system/emaktab_worker.service
+sudo nano /etc/systemd/system/djangofather_worker.service
 
 [Unit]
-Description=Celery EmaktabUz Worker
+Description=Celery DjangoFather Worker
 After=network.target
 
 [Service]
 Type=simple
-WorkingDirectory=/var/projects/emaktabuz/EmaktabUz
-ExecStart=/bin/bash -c '/var/projects/emaktabuz/env/bin/celery -A EmaktabUz worker  -Q emaktab_queue --loglevel=info '
+WorkingDirectory=/var/projects/DjangoFather/DjangoFather
+ExecStart=/bin/bash -c '/var/projects/DjangoFather/env/bin/celery -A core worker --loglevel=info '
 Restart=always
 User=root
 
