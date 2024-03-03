@@ -8,13 +8,23 @@ env = environ.Env()
 env.read_env(".env")
 
 # Set the default Django settings module
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", env.str("DJANGO_SETTINGS_MODULE"))
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
+
+# Initialize Django settings
+if not settings.configured:
+    settings.configure()
 
 # Create a Celery instance
 app = Celery("core")
+app.conf.enable_utc = False
 
-# Configure Celery using Django settings
-app.config_from_object("django.conf:settings", namespace="CELERY")
+# Autodiscover tasks
+app.autodiscover_tasks()
 
-# Auto-discover tasks from all registered Django apps
+# Configure Celery with Django settings
+app.config_from_object('django.conf:settings')
 app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
+
+@app.task(bind=True)
+def debug_task(self):
+    print(f'Request: {self.request!r}')

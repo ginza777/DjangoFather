@@ -12,7 +12,7 @@ sudo systemctl restart nginx
 apt install python3-virtualenv
 apt install redis-server
 
-
+git clone https://github.com/Ginza777/DjangoFather.git
 
 
 sudo apt update

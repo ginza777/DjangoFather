@@ -191,7 +191,7 @@ class Message_history(models.Model):
                                    limit_choices_to={'my_channel': True})
     type = models.ForeignKey(Channel_type, on_delete=models.CASCADE, null=True, blank=True)
     sent_status = models.BooleanField(default=False)
-    time = models.DateTimeField(null=True, blank=True)
+    time = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

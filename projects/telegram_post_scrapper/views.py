@@ -240,8 +240,6 @@ async def write_caption(file_path, caption_text):
 def send_msg(data):
     message = Message.objects.get(message_id=data['message_id'])
     url = f"https://api.telegram.org/bot{data['token']}/sendMediaGroup"
-    print(data)
-    send_msg_log("sherzamon")
     # Fayllarni to'g'ri ko'rsatish uchun
     files = {key: (f"file{index}", file, 'application/octet-stream') for index, (key, file) in
              enumerate(data['files'].items())}

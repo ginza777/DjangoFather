@@ -161,7 +161,7 @@ class TelegramProfile(models.Model):
     language = models.CharField(max_length=255, choices=Language.choices, default=Language.UZBEK, null=True)
     is_bot = models.BooleanField(default=False)
     last_interaction = models.DateTimeField(auto_now=True)
-    first_seen = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    first_seen = models.DateTimeField(auto_now_add=True)
     current_chat_mode = models.ForeignKey(Chat_mode, on_delete=models.SET_NULL, null=True, blank=True,
                                           related_name="current_chat_mode")
     current_model = models.ForeignKey(GptModels, on_delete=models.SET_NULL, null=True, blank=True)

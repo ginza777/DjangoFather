@@ -40,17 +40,22 @@ ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
-DJANGO_APPS = [
-    # "jazzmin",
+INSTALLED_APPS = [
+    "jazzmin",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-]
-
-CUSTOM_APPS = [
+    #third
+    'django_celery_beat',
+    'django_celery_results',
+    "rest_framework",
+    "drf_yasg",
+    "corsheaders",
+    "rosetta",
+    #local
     "central_system",
     "projects.common",
     "projects.chatgpt_bot",
@@ -58,19 +63,11 @@ CUSTOM_APPS = [
     "projects.emaktabuz",
     "projects.tarjimon_bot",
     "projects.caption_editor_bot",
-
 ]
 
-THIRD_PARTY_APPS = [
-    'django_celery_results',
-    'django_celery_beat',
-    "rest_framework",
-    "drf_yasg",
-    "corsheaders",
-    "rosetta",
-]
 
-INSTALLED_APPS = DJANGO_APPS + CUSTOM_APPS + THIRD_PARTY_APPS
+
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -95,8 +92,6 @@ DATABASES = {
         "PORT": env.str("DB_PORT"),
     }
 }
-
-
 
 TEMPLATES = [
     {
@@ -151,13 +146,15 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
-LANGUAGE_CODE = "en"
 
-TIME_ZONE = "Asia/Tashkent"
+LANGUAGE_CODE = 'en-us'
+
+TIME_ZONE = 'Asia/Tashkent'
+
 USE_I18N = True
 
 USE_TZ = True
-USE_L10N = True
+
 LANGUAGES = [
     ("uz", "Uzbek"),
     ("en", "English"),
@@ -189,60 +186,57 @@ CACHES = {
         "KEY_PREFIX": "boilerplate",  # todo: you must change this with your project name or something else
     }
 }
+
+
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-AUDITLOG_INCLUDE_ALL_MODELS = True
+
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
 CELERY_BEAT_SCHEDULE = {
     'send-message-task': {
         'task': 'projects.telegram_post_scrapper.tasks.send_message',
-        'schedule': timedelta(days=1),
+        # 'schedule': timedelta(days=1),
+        "schedule": timedelta(seconds=10),
     },
     'delete_message_task': {
         'task': 'projects.telegram_post_scrapper.tasks.delete_message',
-        'schedule': timedelta(days=2),
+        # 'schedule': timedelta(days=2),
+        "schedule": timedelta(seconds=11),
     },
     'emaktab-task': {
         'task': 'projects.emaktabuz.tasks.post_req',
-        'schedule': crontab(minute=0, hour=8),
+        # 'schedule': crontab(minute=0, hour=8),
+        "schedule": timedelta(seconds=12),
     },
-    "backup-database-task":
-        {
+
+    "backup-database-task":{
             "task": "central_system.tasks.backup_database_task",
-            "schedule": crontab(minute=0, hour=11),
+            # "schedule": crontab(minute=0, hour=11),
+            # every 10 seconds
+            "schedule": timedelta(seconds=13),
         },
-    "webhook-info-task":
-        {
+    "webhook-info-task":{
             "task": "central_system.tasks.webhook_info_task",
-            "schedule": crontab(minute=0, hour=8, day_of_week=0),
+            # "schedule": crontab(minute=0, hour=8, day_of_week=0),
+            "schedule": timedelta(seconds=14),
 
         },
-    "set-webhook-task":
-        {
+    "set-webhook-task":{
             "task": "central_system.tasks.set_webhook_task",
-            "schedule": crontab(minute=0, hour=7, day_of_week=0),
+            # "schedule": crontab(minute=0, hour=7, day_of_week=0),
+            "schedule": timedelta(seconds=15),
         },
 }
-# CELERY_QUEUES = {
-#     'ads_manager_queue': {
-#         'exchange': 'ads_manager_queue',
-#         'routing_key': 'ads_manager_queue.*',
-#     },
-# }
 
 # Set default queue
 # CELERY_DEFAULT_QUEUE = 'ads_manager_queue'
 BROKER_URL = "redis://localhost:6379"
 CELERY_BROKER_URL = "redis://localhost:6379"
 CELERY_RESULT_BACKEND = "redis://localhost:6379"
-CELERY_TASK_TRACK_STARTED = True
-CELERY_TASK_TIME_LIMIT = 30 * 60
-CELERY_ACCEPT_CONTENT = ["application/json"]
-CELERY_TASK_SERIALIZER = "json"
-CELERY_RESULT_SERIALIZER = "json"
-CELERY_TIMEZONE = "Asia/Tashkent"
-CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
-CELERY_BROKER_CONNECTION_RETRY = True
-DJANGO_CELERY_BEAT_TZ_AWARE = False
-
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Asia/Tashkent'
+BROKER_CONNECTION_RETRY_ON_STARTUP = True
 WEBHOOK_URL = env.str("WEBHOOK_URL")
