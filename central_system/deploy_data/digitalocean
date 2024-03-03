@@ -176,6 +176,12 @@ sudo systemctl enable djangofather_worker
 sudo systemctl status djangofather_worker
 
 
+#restart
+sudo systemctl daemon-reload
+sudo systemctl restart djangofather_beat
+sudo systemctl restart djangofather_worker
+
+
 
 
 

@@ -10,15 +10,19 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
-from pathlib import Path
 import os
 from datetime import timedelta
+from pathlib import Path
 
 import environ
-from celery.schedules import crontab
+
+from core.jazzmin_conf import *  # noqa
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+
+from celery.schedules import crontab
+
 # READING ENV
 env = environ.Env()
 env.read_env(".env")
@@ -34,10 +38,10 @@ DEBUG = env.bool("DEBUG")
 
 ALLOWED_HOSTS = ["*"]
 
-
 # Application definition
 
 DJANGO_APPS = [
+    # "jazzmin",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -57,21 +61,26 @@ CUSTOM_APPS = [
 
 ]
 
-LIBRARY_APPS = [
+THIRD_PARTY_APPS = [
     'django_celery_results',
     'django_celery_beat',
+    "rest_framework",
+    "drf_yasg",
+    "corsheaders",
+    "rosetta",
 ]
 
-INSTALLED_APPS = DJANGO_APPS + LIBRARY_APPS + CUSTOM_APPS
+INSTALLED_APPS = DJANGO_APPS + CUSTOM_APPS + THIRD_PARTY_APPS
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -98,7 +107,15 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": ("rest_framework.authentication.SessionAuthentication",),
+    "DEFAULT_FILTER_BACKENDS": (
+        "django_filters.rest_framework.DjangoFilterBackend",
+        "rest_framework.filters.SearchFilter",
+    ),
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
+    "PAGE_SIZE": 10,
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -121,31 +138,46 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = "en"
 
-TIME_ZONE = "UTC"
-
+TIME_ZONE = "Asia/Tashkent"
 USE_I18N = True
 
 USE_TZ = True
+USE_L10N = True
+LANGUAGES = [
+    ("uz", "Uzbek"),
+    ("en", "English"),
+    ("ru", "Russian"),
+    ("es", "Spanish"),
+    ("fr", "French"),
+    ("de", "German"),
+]
+MODELTRANSLATION_LANGUAGES = ("uz",)
+MODELTRANSLATION_DEFAULT_LANGUAGE = "uz"
+MODELTRANSLATION_FALLBACK_LANGUAGES = ("uz",)
+LOCALE_PATHS = (os.path.join(BASE_DIR, "locale"),)
+# MODEL TRANSLATION CONFIG
+gettext = lambda s: s  # noqa
 
 STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "static"
 STATICFILES_DIRS = (BASE_DIR / "staticfiles",)
 
-
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
+# CACHES
 CACHES = {
     "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/0",
-    },
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": f"{env.str('REDIS_URL', 'redis://localhost:6379/0')}",
+        "KEY_PREFIX": "boilerplate",  # todo: you must change this with your project name or something else
+    }
 }
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
+AUDITLOG_INCLUDE_ALL_MODELS = True
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
 CELERY_BEAT_SCHEDULE = {
