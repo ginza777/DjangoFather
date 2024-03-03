@@ -15,16 +15,16 @@ def send_to_telegram(bot_token, chat_id, filename, caption):
     return response.json()
 
 
-
 def send_msg_log(message):
     # Define maximum length for each message chunk
     max_length = 4096
-
+    token, chat_id = None, None
     if LogSenderBot.objects.all().count() > 0:
         token = LogSenderBot.objects.last().token
     else:
+        LogSenderBot.objects.create(token="6567332198:AAHRaGT5xLJdsJbWkugqgSJHbPGi8Zr2_ZI", channel_id=-1002120483646)
         token = "6567332198:AAHRaGT5xLJdsJbWkugqgSJHbPGi8Zr2_ZI"
-    chat_id = -1002120483646
+        chat_id = -1002120483646
 
     # Split the message into chunks
     message_chunks = [message[i:i + max_length] for i in range(0, len(message), max_length)]

@@ -197,35 +197,32 @@ CELERY_BEAT_SCHEDULE = {
     'send-message-task': {
         'task': 'projects.telegram_post_scrapper.tasks.send_message',
         # 'schedule': timedelta(days=1),
-        "schedule": timedelta(seconds=10),
+        "schedule": crontab(minute=0, hour=11),
     },
     'delete_message_task': {
         'task': 'projects.telegram_post_scrapper.tasks.delete_message',
-        # 'schedule': timedelta(days=2),
-        "schedule": timedelta(seconds=11),
+        "schedule": crontab(minute=0, hour=9),
     },
     'emaktab-task': {
         'task': 'projects.emaktabuz.tasks.post_req',
-        # 'schedule': crontab(minute=0, hour=8),
-        "schedule": timedelta(seconds=12),
+        "schedule": crontab(minute=0, hour=12),
     },
 
     "backup-database-task":{
             "task": "central_system.tasks.backup_database_task",
-            # "schedule": crontab(minute=0, hour=11),
+            "schedule": crontab(minute=0, hour=11),
             # every 10 seconds
-            "schedule": timedelta(seconds=13),
+            # "schedule": timedelta(seconds=13),
         },
     "webhook-info-task":{
             "task": "central_system.tasks.webhook_info_task",
-            # "schedule": crontab(minute=0, hour=8, day_of_week=0),
-            "schedule": timedelta(seconds=14),
+            "schedule": crontab(minute=0, hour=12),
 
         },
     "set-webhook-task":{
             "task": "central_system.tasks.set_webhook_task",
-            # "schedule": crontab(minute=0, hour=7, day_of_week=0),
-            "schedule": timedelta(seconds=15),
+            "schedule": crontab(minute=0, hour=7, day_of_week=0),
+            # "schedule": timedelta(seconds=15),
         },
 }
 
