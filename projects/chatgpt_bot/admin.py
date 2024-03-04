@@ -33,8 +33,10 @@ class TokenPackageAdmin(admin.ModelAdmin):
 @admin.register(TelegramProfile)
 class TelegramProfileUserAdmin(admin.ModelAdmin):
     list_display = (
-        "id", "telegram_id", "last_interaction", "current_chat_mode", "current_model", "daily_limit", "extra_limit")
+        "id", "telegram_id", "first_name","last_name","username","last_interaction", "current_chat_mode", "current_model", "daily_limit", "extra_limit")
     filter_horizontal = ("bot",)
+    search_fields = ("telegram_id", "first_name","last_name","username",)
+    list_filter = ("current_chat_mode", "current_model", "language", "bot")
 
 
 @admin.register(Dialog)

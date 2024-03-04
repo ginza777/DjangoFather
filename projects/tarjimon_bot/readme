@@ -1,2 +1,6 @@
+
 gcloud init
 gcloud auth login
+
+https://cloud.google.com/docs/authentication/provide-credentials-adc#how-to
+https://codelabs.developers.google.com/codelabs/cloud-translation-python3#2
