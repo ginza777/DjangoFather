@@ -51,7 +51,7 @@ class MessagesDialogAdmin(admin.ModelAdmin):
     list_filter = ("dialog__chat_mode", "dialog__gpt_model", "dialog__end", "dialog__user__username")
 
     def dialog_user(self, obj):
-        return obj.dialog.user.user
+        return obj.dialog.user
 
     dialog_user.short_description = "User"
 
