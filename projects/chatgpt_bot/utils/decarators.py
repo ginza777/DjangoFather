@@ -70,17 +70,19 @@ def get_member(func):
             user.last_name = last_name
             user.username = username
             user.language = selected_language
-            user.current_chat_mode = current_chat_mode
-            user.current_model = current_model
             await database_sync_to_async(user.bot.add)(bot)
             await user.asave()
         else:
             user.language = selected_language
-            user.current_chat_mode = current_chat_mode
-            user.current_model = current_model
             await database_sync_to_async(user.bot.add)(bot)
             await user.asave()
-        activate("en")
+        if user.current_chat_mode is None:
+            user.current_chat_mode = current_chat_mode
+            await user.asave()
+        if user.current_model is None:
+            user.current_model = current_model
+            await user.asave()
+
         return await func(update, context, user, *args, **kwargs)
 
     return wrap
