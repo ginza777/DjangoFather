@@ -1,6 +1,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/django
 # Edit at https://www.toptal.com/developers/gitignore?templates=django
 
+
++998993485501.session
++998993485501.session-journal
 ### Django ###
 *.log
 *.pot
