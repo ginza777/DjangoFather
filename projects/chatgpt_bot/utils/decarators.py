@@ -3,7 +3,6 @@ from django.utils.translation import activate
 
 from projects.chatgpt_bot import models
 
-
 def get_member(func):
     async def wrap(update, context, *args, **kwargs):
         user_id, first_name, last_name, username = 0, "", "", ""
@@ -42,7 +41,6 @@ def get_member(func):
         print("Last Name:", last_name)
         print("Username:", username)
 
-
         bot = await models.TelegramBot.objects.aget(bot_username=context.bot.username)
         current_model = await models.GptModels.objects.aget(model="gpt-3.5-turbo-16k")
         current_chat_mode = await models.Chat_mode.objects.aget(key="assistant")
@@ -55,34 +53,43 @@ def get_member(func):
             print(f"Language code '{language_code}' not found in choices. Using default language.")
 
         print(f"Selected Language: {selected_language}")
-        user, created = await models.TelegramProfile.objects.aget_or_create(
-            telegram_id=user_id,
-            defaults={
-                "first_name": first_name,
-                "last_name": last_name,
-                "username": username,
-                "language": selected_language,
-            },
-        )
-        print(f"User: {user},\n Created: {created}")
-        if not created:
-            user.first_name = first_name
-            user.last_name = last_name
-            user.username = username
-            user.language = selected_language
-            await database_sync_to_async(user.bot.add)(bot)
-            await user.asave()
-        else:
-            user.language = selected_language
-            await database_sync_to_async(user.bot.add)(bot)
-            await user.asave()
-        if user.current_chat_mode is None:
-            user.current_chat_mode = current_chat_mode
-            await user.asave()
-        if user.current_model is None:
-            user.current_model = current_model
-            await user.asave()
+
+        # Convert synchronous database operations to asynchronous
+        user, created = await get_or_create_user(user_id, first_name, last_name, username, selected_language, bot, current_model, current_chat_mode)
 
         return await func(update, context, user, *args, **kwargs)
 
     return wrap
+
+# Define a coroutine function to create or retrieve user asynchronously
+@database_sync_to_async
+def get_or_create_user(user_id, first_name, last_name, username, selected_language, bot, current_model, current_chat_mode):
+    user, created = models.TelegramProfile.objects.get_or_create(
+        telegram_id=user_id,
+        defaults={
+            "first_name": first_name,
+            "last_name": last_name,
+            "username": username,
+            "language": selected_language,
+        },
+    )
+    if not created:
+        user.first_name = first_name
+        user.last_name = last_name
+        user.username = username
+        user.language = selected_language
+        user.bot.add(bot)
+        user.save()
+    else:
+        user.language = selected_language
+        user.bot.add(bot)
+        user.save()
+
+    if user.current_chat_mode is None:
+        user.current_chat_mode = current_chat_mode
+        user.save()
+    if user.current_model is None:
+        user.current_model = current_model
+        user.save()
+
+    return user, created
