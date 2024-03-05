@@ -56,7 +56,7 @@ def filter_caption(caption: str, channel_id) -> str:
         for key_word in keyword_text_list:
             caption = caption.replace(key_word, '')  # Fixed here, you need to assign the replaced caption back
         # caption = '\n'.join(line for line in caption.splitlines() if line.strip())
-        caption += F"\n\n•┈┈┈•• ✦🍃✦••┈┈┈•\n\n{channel.channel_sign}"
+        caption += F"\n\n🐾꯭꯭꯭🇸꯭꯭ཽཾ𝐇꯭꯭꯭ི𝐞ྀ𝐢꯭꯭꯭ི𝐤꯭꯭꯭ྀ𝐡꯭꯭꯭꯭ི🐾꯭꯭\n\n{channel.channel_sign}"
         return caption
     return caption
 
