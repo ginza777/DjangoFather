@@ -2,28 +2,34 @@ import datetime
 
 import requests
 from rest_framework.generics import ListAPIView
+from rest_framework.permissions import IsAuthenticated
 from central_system.models import LogSenderBot
 from projects.telegram_post_scrapper.models import Client_Settings, Bot, Channel_type,Channels, KeywordChannelAds
 from central_system.serializers import ChannelsSerializer, ClientSettingsSerializer, BotSerializer, ChannelTypeSerializer, KeywordChannelAdsSerializer
 
 
 class ChannelsApi(ListAPIView):
+    permission_classes = [IsAuthenticated]
     queryset = Channels.objects.all()
     serializer_class = ChannelsSerializer
 
 class ClientSettingsApi(ListAPIView):
+    permission_classes = [IsAuthenticated]
     queryset = Client_Settings.objects.all()
     serializer_class = ClientSettingsSerializer
 
 class BotApi(ListAPIView):
+    permission_classes = [IsAuthenticated]
     queryset = Bot.objects.all()
     serializer_class = BotSerializer
 
 class ChannelTypeApi(ListAPIView):
+    permission_classes = [IsAuthenticated]
     queryset = Channel_type.objects.all()
     serializer_class = ChannelTypeSerializer
 
 class KeywordChannelAdsApi(ListAPIView):
+    permission_classes = [IsAuthenticated]
     queryset = KeywordChannelAds.objects.all()
     serializer_class = KeywordChannelAdsSerializer
 
