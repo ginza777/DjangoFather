@@ -23,13 +23,14 @@ from .schema import swagger_urlpatterns
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('telegram-post-scrapper/', include("projects.telegram_post_scrapper.urls")),
+    path("api/", include("central_system.urls")),
     path("rosetta/", include("rosetta.urls")),
     path("chatgpt-bot/", include("projects.chatgpt_bot.urls")),
     path("tarjimon-bot/", include("projects.tarjimon_bot.urls")),
     path("caption-editor-bot/", include("projects.caption_editor_bot.urls")),
     path("deploy-creator-bot/", include("projects.common.urls")),
     path("common-bot/", include("projects.common.urls")),
+
 
 ]
 urlpatterns += swagger_urlpatterns

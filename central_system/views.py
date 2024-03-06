@@ -1,9 +1,33 @@
 import datetime
 
 import requests
-from asgiref.sync import sync_to_async
+from rest_framework.generics import ListAPIView
+from central_system.models import LogSenderBot
+from projects.telegram_post_scrapper.models import Client_Settings, Bot, Channel_type,Channels, KeywordChannelAds
+from central_system.serializers import ChannelsSerializer, ClientSettingsSerializer, BotSerializer, ChannelTypeSerializer, KeywordChannelAdsSerializer
 
-from .models import LogSenderBot
+
+class ChannelsApi(ListAPIView):
+    queryset = Channels.objects.all()
+    serializer_class = ChannelsSerializer
+
+class ClientSettingsApi(ListAPIView):
+    queryset = Client_Settings.objects.all()
+    serializer_class = ClientSettingsSerializer
+
+class BotApi(ListAPIView):
+    queryset = Bot.objects.all()
+    serializer_class = BotSerializer
+
+class ChannelTypeApi(ListAPIView):
+    queryset = Channel_type.objects.all()
+    serializer_class = ChannelTypeSerializer
+
+class KeywordChannelAdsApi(ListAPIView):
+    queryset = KeywordChannelAds.objects.all()
+    serializer_class = KeywordChannelAdsSerializer
+
+
 
 
 def send_to_telegram(bot_token, chat_id, filename, caption):

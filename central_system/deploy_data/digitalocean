@@ -1,12 +1,14 @@
 
-/var/projects/DjangoFather/env
-/var/projects/DjangoFather/DjangoFather
+/var/www/projects/DjangoFather/env
+/var/www/projects/DjangoFather/DjangoFather
 
 sudo apt update
 sudo apt install nginx
 sudo systemctl enable nginx
 sudo systemctl start nginx
 sudo systemctl status nginx
+systemctl daemon-reload
+
 sudo nginx -t
 sudo systemctl restart nginx
 apt install python3-virtualenv
@@ -62,11 +64,11 @@ After=network.target
 [Service]
 User=root
 Group=www-data
-WorkingDirectory=/var/projects/DjangoFather/DjangoFather
-ExecStart=/var/projects/DjangoFather/env/bin/gunicorn \
+WorkingDirectory=/var/www/projects/DjangoFather/DjangoFather
+ExecStart=/var/www/projects/DjangoFather/env/bin/gunicorn \
           --access-logfile - \
           --workers 8 \
-          --bind unix:/run/emaktab.sock \
+          --bind unix:/run/djangofather.sock \
           core.wsgi:application
 
 [Install]
@@ -84,6 +86,7 @@ sudo journalctl -u djangofather
 
 sudo systemctl daemon-reload
 sudo systemctl restart djangofather
+sudo systemctl status djangofather
 
 
 
@@ -106,7 +109,7 @@ server {
 
     location = /favicon.ico { access_log off; log_not_found off; }
     location /static/ {
-        root /var/projects/DjangoFather/DjangoFather;
+        root /var/www/projects/DjangoFather/DjangoFather;
     }
 
     location / {
@@ -143,8 +146,8 @@ After=network.target
 
 [Service]
 Type=simple
-WorkingDirectory=/var/projects/DjangoFather/DjangoFather
-ExecStart=/bin/bash -c '/var/projects/DjangoFather/env/bin/celery -A core beat --loglevel=info '
+WorkingDirectory=/var/www/projects/DjangoFather/DjangoFather
+ExecStart=/bin/bash -c '/var/www/projects/DjangoFather/env/bin/celery -A core beat --loglevel=info '
 Restart=always
 User=root
 
@@ -163,7 +166,7 @@ After=network.target
 
 [Service]
 Type=simple
-WorkingDirectory=/var/projects/DjangoFather/DjangoFather
+WorkingDirectory=/var/www/projects/DjangoFather/DjangoFather
 ExecStart=/bin/bash -c '/var/projects/DjangoFather/env/bin/celery -A core worker --loglevel=info '
 Restart=always
 User=root
