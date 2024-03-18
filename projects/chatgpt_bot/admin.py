@@ -33,7 +33,7 @@ class TokenPackageAdmin(admin.ModelAdmin):
 @admin.register(TelegramProfile)
 class TelegramProfileUserAdmin(admin.ModelAdmin):
     list_display = (
-        "id", "telegram_id", "first_name","last_name","username","last_interaction", "current_chat_mode", "current_model", "daily_limit", "extra_limit")
+        "id", "telegram_id", "first_name","last_name","username","last_interaction", "current_chat_mode", "current_model", "daily_limit", "extra_limit","language")
     filter_horizontal = ("bot",)
     search_fields = ("telegram_id", "first_name","last_name","username",)
     list_filter = ("current_chat_mode", "current_model", "language", "bot")
@@ -47,7 +47,7 @@ class DialogAdmin(admin.ModelAdmin):
 
 @admin.register(Messages_dialog)
 class MessagesDialogAdmin(admin.ModelAdmin):
-    list_display = ("dialog_user", "user", "bot", "dialog", "input_tokens", "output_tokens", "end", 'chat_mode')
+    list_display = ("dialog_user__first_name","dialog_user__last_name","dialog_user__username", "user", "bot", "dialog", "input_tokens", "output_tokens", "end", 'chat_mode')
     list_filter = ("dialog__chat_mode", "dialog__gpt_model", "dialog__end", "dialog__user__username")
 
     def dialog_user(self, obj):
