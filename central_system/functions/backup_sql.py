@@ -1,7 +1,7 @@
 import datetime
 import os
 import subprocess
-
+import shutil
 import environ
 
 from central_system.models import LogSenderBot, BackupDbBot
@@ -43,6 +43,12 @@ def backup_database():
             channel_id = -1002041724232
 
         send_to_telegram(token, channel_id, dump_file, f"All bots: > Backup file: {dump_file}")
+        #delete backup file by shutil
+        shutil.rmtree(dump_file)
+
+
+
+
     except Exception as e:
         # all files finish with .sqlite3
         send_msg_log(f"Central system backup\nError occurred while executing command: {e}")
