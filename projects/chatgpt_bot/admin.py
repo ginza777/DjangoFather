@@ -48,7 +48,7 @@ class DialogAdmin(admin.ModelAdmin):
 @admin.register(Messages_dialog)
 class MessagesDialogAdmin(admin.ModelAdmin):
     list_display = ("dialog_user__first_name","dialog_user__last_name","dialog_user__username", "user", "bot", "dialog", "input_tokens", "output_tokens", "end", 'chat_mode')
-    list_filter = ("dialog__chat_mode", "dialog__gpt_model", "dialog__end", "dialog__user__username")
+    list_filter = ("dialog__chat_mode", "dialog__gpt_model", "dialog__end")
 
     def dialog_user(self, obj):
         return obj.dialog.user
