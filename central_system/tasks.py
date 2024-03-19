@@ -12,6 +12,6 @@ def backup_database_task():
 def webhook_info_task():
     webhook_info()
 
-@shared_taskx
+@shared_task
 def set_webhook_task():
     set_webhook()

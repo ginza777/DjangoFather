@@ -199,10 +199,10 @@ CELERY_BEAT_SCHEDULE = {
         # 'schedule': timedelta(days=1),
         "schedule": crontab(minute=0, hour=12),
     },
-    'delete_message_task': {
-        'task': 'projects.telegram_post_scrapper.tasks.delete_message',
-        "schedule": crontab(day_of_week=0, hour=0, minute=0),
-    },
+    # 'delete_message_task': {
+    #     'task': 'projects.telegram_post_scrapper.tasks.delete_message',
+    #     "schedule": crontab(day_of_week=0, hour=0, minute=0),
+    # },
     'emaktab-task': {
         'task': 'projects.emaktabuz.tasks.post_req',
         "schedule": crontab(minute=0, hour=3),
