@@ -195,3 +195,6 @@ sudo systemctl restart djangofather_worker
 
 celery -A  core beat --loglevel=info  --scheduler django_celery_beat.schedulers:DatabaseScheduler
 celery -A  core worker  --loglevel=info
+
+
+sudo journalctl -u djangofather --lines 50

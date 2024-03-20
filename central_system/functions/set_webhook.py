@@ -1,6 +1,5 @@
 import environ
 import requests
-import time
 
 from central_system.views import send_msg_log
 # all telegram bots
