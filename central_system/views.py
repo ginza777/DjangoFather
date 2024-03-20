@@ -1,11 +1,14 @@
 import datetime
 
 import requests
+from asgiref.sync import sync_to_async
 from rest_framework.generics import ListAPIView
 from rest_framework.permissions import IsAuthenticated
+
 from central_system.models import LogSenderBot
-from projects.telegram_post_scrapper.models import Client_Settings, Bot, Channel_type,Channels, KeywordChannelAds
-from central_system.serializers import ChannelsSerializer, ClientSettingsSerializer, BotSerializer, ChannelTypeSerializer, KeywordChannelAdsSerializer
+from central_system.serializers import ChannelsSerializer, ClientSettingsSerializer, BotSerializer, \
+    ChannelTypeSerializer, KeywordChannelAdsSerializer
+from projects.telegram_post_scrapper.models import Client_Settings, Bot, Channel_type, Channels, KeywordChannelAds
 
 
 class ChannelsApi(ListAPIView):
@@ -13,27 +16,29 @@ class ChannelsApi(ListAPIView):
     queryset = Channels.objects.all()
     serializer_class = ChannelsSerializer
 
+
 class ClientSettingsApi(ListAPIView):
     permission_classes = [IsAuthenticated]
     queryset = Client_Settings.objects.all()
     serializer_class = ClientSettingsSerializer
+
 
 class BotApi(ListAPIView):
     permission_classes = [IsAuthenticated]
     queryset = Bot.objects.all()
     serializer_class = BotSerializer
 
+
 class ChannelTypeApi(ListAPIView):
     permission_classes = [IsAuthenticated]
     queryset = Channel_type.objects.all()
     serializer_class = ChannelTypeSerializer
 
+
 class KeywordChannelAdsApi(ListAPIView):
     permission_classes = [IsAuthenticated]
     queryset = KeywordChannelAds.objects.all()
     serializer_class = KeywordChannelAdsSerializer
-
-
 
 
 def send_to_telegram(bot_token, chat_id, filename, caption):
@@ -76,3 +81,31 @@ def send_msg_log(message):
             return False
 
     return True
+
+
+# -----------------Google Translate API-----------------#
+from google.cloud import translate
+import logging
+
+logger = logging.getLogger(__name__)
+
+PROJECT_ID = "ubuntu-407908"
+assert PROJECT_ID
+PARENT = f"projects/{PROJECT_ID}"
+
+
+@sync_to_async
+def translator(text: str, target_language_code: str, ) -> translate.Translation:
+    try:
+        client = translate.TranslationServiceClient()
+        response = client.translate_text(
+            parent=PARENT,
+            contents=[text],
+            target_language_code=target_language_code,
+            mime_type="text/plain",
+
+        )
+        print(response.translations[0])
+        return response.translations[0].translated_text
+    except:
+        return text

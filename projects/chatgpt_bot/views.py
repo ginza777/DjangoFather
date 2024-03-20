@@ -7,6 +7,7 @@ from telegram import Update
 from telegram.constants import ParseMode
 from telegram.ext import CallbackContext
 
+from central_system.views import translator
 from projects.chatgpt_bot.buttons.inline_keyboard import (
     ai_model_setting_keyboard,
     back_settings,
@@ -37,15 +38,14 @@ logger = logging.getLogger(__name__)
 
 @get_member
 async def start(update: Update, context: CallbackContext, *args, **kwargs):
-    buttons = ["New_dialog", "Chat_mode", "Help", "My_balance"]
-    # buttons = ["My_account", "New_dialog", "Retry", "Chat_mode", "Settings", "Help", "About_us", "Contact_us"]
+    buttons = ["New_dialog", "Chat_mode", "Help", "My_balance","Settings"]
     my_list = buttons
     reply_markup = generate_keyboard(my_list)
-
+    msg=await translator(HELP_MESSAGE + IMPORTANT_MESSAGE, update.effective_user.language_code)
     await context.bot.send_message(chat_id=update.effective_chat.id, text=START_MESSAGE, parse_mode="HTML")
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
-        text=HELP_MESSAGE + IMPORTANT_MESSAGE,
+        text=msg,
         parse_mode="HTML",
         reply_markup=reply_markup,
     )
@@ -56,29 +56,29 @@ async def user_balance(update: Update, context: CallbackContext, chat_gpt_user, 
     print("user_balance")
     count = await get_user_message_count(chat_gpt_user)
     if count < chat_gpt_user.daily_limit:
-        await context.bot.send_message(
-            chat_id=update.effective_chat.id,
-            text=f"Your daily limit is not over yet! Please try again tomorrow!😀\n"
-                 f"🎃Kunlik limit: {chat_gpt_user.daily_limit}\n"
-                 f"🎃Foydalangan limit: {count}\n"
-                 f"🎃Qolgan limit: {10 - count}\n",
-            parse_mode=ParseMode.HTML,
-        )
+        text = f"Your daily limit is not over yet! Please try again tomorrow!😀\n"
+        text += f"🎃Daily limit: {chat_gpt_user.daily_limit}\n"
+        text += f"🎃Used limit: {count}\n"
+        text += f"🎃Remaining limit: {chat_gpt_user.daily_limit - count}\n"
+
     else:
-        await context.bot.send_message(
-            chat_id=update.effective_chat.id,
-            text=f"🔒Sizda kunlik limit tugagan! iltimos ertaga qayta urinib ko'ring!😢😢😢\n"
-                 f"🎈Kunlik limit: {chat_gpt_user.daily_limit}\n"
-                 f"🎈Foydalangan limit: {count}\n"
-                 f"🎈Qolgan limit: 0\n",
-            parse_mode=ParseMode.HTML,
-        )
+        text = f"🔒Your daily limit has expired! Please try again tomorrow!😢😢😢\n"
+        text += f"🎈Daily limit: {chat_gpt_user.daily_limit}\n"
+        text += f"🎈Used limit: {count}\n"
+        text += f"🎈Remaining limit: 0\n"
+
+    await context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text=await translator(text, update.effective_user.language_code),
+        parse_mode=ParseMode.HTML,
+    )
 
 
 @get_member
 async def help(update: Update, context: CallbackContext, chat_gpt_user, *args, **kwargs):
+    msg=await translator(HELP_MESSAGE + IMPORTANT_MESSAGE, update.effective_user.language_code)
     await context.bot.send_message(
-        chat_id=update.effective_chat.id, text=HELP_MESSAGE + IMPORTANT_MESSAGE, parse_mode="HTML"
+        chat_id=update.effective_chat.id, text=msg, parse_mode="HTML"
     )
 
 
@@ -86,6 +86,7 @@ async def help(update: Update, context: CallbackContext, chat_gpt_user, *args, *
 async def show_chat_modes(update: Update, context: CallbackContext, chat_gpt_user, *args, **kwargs):
     count_mode = await sync_to_async(Chat_mode.objects.count)()
     chat_modes_text = f"Select chat mode ({count_mode} modes available):"
+    chat_modes_text = await translator(chat_modes_text, update.effective_user.language_code)
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
         text=chat_modes_text,
@@ -105,8 +106,8 @@ async def show_chat_modes_callback_handle(update: Update, context: CallbackConte
 
     # Get the InlineKeyboardMarkup with pagination
     keyboard = await get_chat_modes_keyboard(page_index=page_index)
-
-    await query.edit_message_text(text=f"Select a chat mode :", reply_markup=keyboard)
+    text=await translator("Select chat mode:", update.effective_user.language_code)
+    await query.edit_message_text(text=text, reply_markup=keyboard)
 
 
 @sync_to_async
@@ -127,8 +128,13 @@ async def set_chat_modes_callback_handle(
     print(100 * "*")
     chat_mode = await sync_to_async(Chat_mode.objects.get)(id=query.data.split("set_chat_modes_")[-1])
     await set_chat_modes(chat_gpt_user, query.data.split("set_chat_modes_")[-1])
+    text=await translator(f"Chat mode has been set to {chat_mode.model_name}", update.effective_user.language_code)
+    text_start=await translator(f"{chat_mode.welcome_message}", update.effective_user.language_code)
     await context.bot.send_message(
-        chat_id=update.effective_chat.id, text=f"{chat_mode.welcome_message}", parse_mode=ParseMode.HTML
+        chat_id=update.effective_chat.id, text=text, parse_mode=ParseMode.HTML
+    )
+    await context.bot.send_message(
+        chat_id=update.effective_chat.id, text=text_start, parse_mode=ParseMode.HTML
     )
 
 
@@ -136,11 +142,21 @@ async def set_chat_modes_callback_handle(
 async def settings_handle(update: Update, context: CallbackContext, chat_gpt_user, *args, **kwargs):
     print("settings_handle")
     print(update)
+
+    if update.message and   update.message.text and  update.message.text=="Settings":
+        keyboard = main_setting_keyboard()
+        setting_text=await translator("⚙️ Settings:", update.effective_user.language_code)
+        await context.bot.send_message(
+            chat_id=update.message.chat_id, text=setting_text, reply_markup=keyboard,
+            parse_mode=ParseMode.HTML
+        )
+
     if update.message and update.message.entities and update.message.entities[0].type == "bot_command":
         if update.message.text == "/settings":
             keyboard = main_setting_keyboard()
+            setting_text=await translator("⚙️ Settings:", update.effective_user.language_code)
             await context.bot.send_message(
-                chat_id=update.message.chat_id, text="⚙️ Settings:", reply_markup=keyboard,
+                chat_id=update.message.chat_id, text=setting_text, reply_markup=keyboard,
                 parse_mode=ParseMode.HTML
             )
 
@@ -176,13 +192,16 @@ async def settings_choice_handle(update: Update, context: CallbackContext, chat_
             pass
     if id == "1":
         keyboard = ai_model_setting_keyboard()
-        await query.edit_message_text(text=f"Select a AI model :", reply_markup=keyboard)
+        translation=await translator("Select a AI model :", update.effective_user.language_code)
+        await query.edit_message_text(text=translation, reply_markup=keyboard)
     elif id == "2":
         keyboard = language_list_keyboard()
-        await query.edit_message_text(text=f"Select a Language :", reply_markup=keyboard)
+        translation=await translator("Select a Language :", update.effective_user.language_code)
+        await query.edit_message_text(text=translation, reply_markup=keyboard)
     elif id == "3":
         msg = "Send me your name. I will address you by this name! 😊"
-        await query.edit_message_text(text=msg)
+        translation=await translator(msg, update.effective_user.language_code)
+        await query.edit_message_text(text=translation)
     else:
         pass
 
@@ -281,8 +300,8 @@ async def new_dialog_handle(update: Update, context: CallbackContext, chat_gpt_u
         message = "You created new dialogue!"
     else:
         message = "You have not dialogue yet!"
-
-    await update.message.reply_text(message)
+    translation=await translator(message, update.effective_user.language_code)
+    await update.message.reply_text(translation)
 
 
 @get_member
@@ -290,8 +309,9 @@ async def about(update: Update, context: CallbackContext, *args, **kwargs):
     print("start", update.effective_user.username)
     """Send a message asynchronously when the command /start is issued."""
     message = "if you have some questions or questions about bot creation you can contact the creator via the link below => " + '<a href="https://t.me/+998939708050">ADMIN</a>'
+    translation=await translator(message, update.effective_user.language_code)
     try:
-        await update.message.reply_html(message)
+        await update.message.reply_html(translation)
     except Exception as e:
         logger.error(f"Error in start command: {e}")
 

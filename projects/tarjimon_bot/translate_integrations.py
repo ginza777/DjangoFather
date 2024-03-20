@@ -21,6 +21,7 @@ def translate_text_with_lang(text: str, source_language_code: str,
         contents=[text],
         target_language_code=target_language_code,
         source_language_code=source_language_code,
+        mime_type="text/plain",
     )
 
     return response.translations[0]
@@ -34,6 +35,7 @@ def translate_text_auto_lang(text: str, target_language_code: str, ) -> translat
         parent=PARENT,
         contents=[text],
         target_language_code=target_language_code,
+        mime_type="text/plain",
     )
 
     return response.translations[0]
