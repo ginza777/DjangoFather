@@ -48,7 +48,7 @@ def backup_database():
 
         txt = f"Central system backup\ndelete dump database after send::\n"
 
-        folder_name = f"{dump_file}"
+        folder_name = f"./{dump_file}"
         if os.path.exists(folder_name):
             shutil.rmtree(folder_name)
             txt += f"delete    = {folder_name}\n"
