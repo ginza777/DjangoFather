@@ -35,9 +35,10 @@ def webhook_info():
     for bot in bots:
         url = f"https://api.telegram.org/bot{bot}/getWebhookInfo"
         response = requests.post(url)
+        data=response.json()
         if response.status_code == 200:
             message += f"200 - {bot}\n"
-            message += f"{response.json()}\n"
+            message += f"{data["result"]["url"]}\n"
         else:
             message += f"{response.status_code} - {bot}\n"
             message += f"{response.json()}\n"
