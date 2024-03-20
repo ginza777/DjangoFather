@@ -3,7 +3,7 @@ import os
 import subprocess
 import shutil
 import environ
-
+import time
 from central_system.models import LogSenderBot, BackupDbBot
 from central_system.views import send_to_telegram, send_msg_log
 
@@ -26,6 +26,7 @@ def backup_database():
         dump_file = f"backup_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.sql"
 
         # Dumpni olish uchun bash komandasi
+
         command = f"pg_dump -U {DB_USER} -h {DB_HOST} -p {DB_PORT} {DB_NAME} > {dump_file}"
         os.environ['PGPASSWORD'] = DB_PASSWORD
         # Komandani bajarish
@@ -43,16 +44,21 @@ def backup_database():
             channel_id = -1002041724232
 
         send_to_telegram(token, channel_id, dump_file, f"All bots: > Backup file: {dump_file}")
-        #delete backup file by shutil
-        shutil.rmtree(dump_file)
+        # delete backup file by shutil
 
+        txt = f"Central system backup\ndelete dump database after send::\n"
 
+        folder_name = f"{dump_file}"
+        if os.path.exists(folder_name):
+            shutil.rmtree(folder_name)
+            txt += f"delete    = {folder_name}\n"
+        else:
+            txt += f"error delete = {folder_name}\n"
 
-
+        send_msg_log(txt)
     except Exception as e:
         # all files finish with .sqlite3
         send_msg_log(f"Central system backup\nError occurred while executing command: {e}")
-
 
 
 __all__ = ["backup_database"]

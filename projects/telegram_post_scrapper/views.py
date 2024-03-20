@@ -7,15 +7,11 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 
 import requests
-from django.core.serializers import serialize
-from django.http import JsonResponse
-from django.shortcuts import render
 from django.utils import timezone
 
 from projects.telegram_post_scrapper.models import Listening_channels, Message_log, SomeErrors, Message_history, \
     Channels, Bot as LogSenderBot, \
     Filename, Message, KeywordChannelAds
-from .models import Client_Settings, Bot, Channel_type, Channel_post_setting
 
 
 # Create your views here.
