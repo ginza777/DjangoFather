@@ -36,6 +36,8 @@ def backup_database():
             print(f"Error occurred while executing command: {e}")
             send_msg_log(f"Central system backup\nError occurred while executing command: {e}")
             return
+
+        # sending backup file
         if BackupDbBot.objects.all().count() > 0:
             token = BackupDbBot.objects.last().token
             channel_id = BackupDbBot.objects.last().channel_id
@@ -44,16 +46,15 @@ def backup_database():
             channel_id = -1002041724232
 
         send_to_telegram(token, channel_id, dump_file, f"All bots: > Backup file: {dump_file}")
-        # delete backup file by shutil
 
+        # delete backup file
         txt = f"Central system backup\ndelete dump database after send::\n"
 
-        folder_name = f"./{dump_file}"
-        if os.path.exists(folder_name):
-            shutil.rmtree(folder_name)
-            txt += f"delete    = {folder_name}\n"
+        if os.path.exists(dump_file):
+            os.remove(dump_file)
+            txt += f"delete    = {dump_file}\n"
         else:
-            txt += f"error delete = {folder_name}\n"
+            txt += f"error delete = {dump_file}\n"
 
         send_msg_log(txt)
     except Exception as e:
