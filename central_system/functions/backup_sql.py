@@ -52,7 +52,7 @@ def backup_database():
 
         if os.path.exists(dump_file):
             os.remove(dump_file)
-            txt += f"delete    = {dump_file}\n"
+            txt += f"delete = {dump_file}\n"
         else:
             txt += f"error delete = {dump_file}\n"
 

@@ -261,6 +261,10 @@ def send_msg(data):
         message.send_status = True
         message.save()
 
+
+
+
+
     if r.status_code == 400:
         message_sent_status(message=message, status=False, channel_from=channel_from, channel_to=channel_to, type=type)
         print(

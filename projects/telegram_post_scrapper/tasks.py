@@ -88,7 +88,7 @@ def delete_message():
     txt = f"delete_message: today={today}\n"
     txt_not = ''
     # Bir kun oldingi sana
-    one_day_ago = today - timedelta(days=1)
+    one_day_ago = today - timedelta(days=3)
     # Send_status=True yoki Delete_status=True va updated_at oldingi sana
     messages = Message.objects.filter(Q(send_status=True) | Q(delete_status=True), updated_at__lt=one_day_ago)
     for message_id in messages.values_list('message_id', flat=True):

@@ -48,14 +48,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    #third
+    # third
     'django_celery_beat',
     'django_celery_results',
     "rest_framework",
     "drf_yasg",
     "corsheaders",
     "rosetta",
-    #local
+    # local
     "central_system",
     "projects.common",
     "projects.chatgpt_bot",
@@ -64,10 +64,6 @@ INSTALLED_APPS = [
     "projects.tarjimon_bot",
     "projects.caption_editor_bot",
 ]
-
-
-
-
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -187,8 +183,6 @@ CACHES = {
     }
 }
 
-
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
@@ -199,31 +193,31 @@ CELERY_BEAT_SCHEDULE = {
         # 'schedule': timedelta(days=1),
         "schedule": crontab(minute=0, hour=12),
     },
-    # 'delete_message_task': {
-    #     'task': 'projects.telegram_post_scrapper.tasks.delete_message',
-    #     "schedule": crontab(day_of_week=0, hour=0, minute=0),
-    # },
+    'delete_message_task': {
+        'task': 'projects.telegram_post_scrapper.tasks.delete_message',
+        "schedule": crontab(minute=0, hour=2),
+    },
     'emaktab-task': {
         'task': 'projects.emaktabuz.tasks.post_req',
         "schedule": crontab(minute=0, hour=3),
     },
 
-    "backup-database-task":{
-            "task": "central_system.tasks.backup_database_task",
-            "schedule": crontab(minute=0, hour=19),
-            # every 10 seconds
-            # "schedule": timedelta(seconds=13),
-        },
-    "webhook-info-task":{
-            "task": "central_system.tasks.webhook_info_task",
-            "schedule": crontab(minute=0, hour=7, day_of_week=0),
+    "backup-database-task": {
+        "task": "central_system.tasks.backup_database_task",
+        "schedule": crontab(minute=0, hour=19),
+        # every 10 seconds
+        # "schedule": timedelta(seconds=13),
+    },
+    "webhook-info-task": {
+        "task": "central_system.tasks.webhook_info_task",
+        "schedule": crontab(minute=0, hour=7, day_of_week=0),
 
-        },
-    "set-webhook-task":{
-            "task": "central_system.tasks.set_webhook_task",
-            "schedule": crontab(minute=0, hour=2, day_of_week=0),
-            # "schedule": timedelta(seconds=15),
-        },
+    },
+    "set-webhook-task": {
+        "task": "central_system.tasks.set_webhook_task",
+        "schedule": crontab(minute=0, hour=2, day_of_week=0),
+        # "schedule": timedelta(seconds=15),
+    },
 }
 
 # Set default queue
@@ -234,6 +228,6 @@ CELERY_RESULT_BACKEND = "redis://localhost:6379"
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
-CELERY_TIMEZONE='Asia/Tashkent'
+CELERY_TIMEZONE = 'Asia/Tashkent'
 BROKER_CONNECTION_RETRY_ON_STARTUP = True
 WEBHOOK_URL = env.str("WEBHOOK_URL")
