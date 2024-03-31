@@ -24,7 +24,7 @@ class ChatgptBotConfig(AppConfig):
         print("setup webhook caption editor bot...")
         try:
             bot_tokens = await self.get_bot_tokens()
-            print("bot_tokens: ", bot_tokens)
+
             for bot_token in bot_tokens:
                 await set_webhook(bot_token)
         except telegram.error.RetryAfter:
