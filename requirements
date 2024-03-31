@@ -20,7 +20,7 @@ celery
 django-celery-beat
 django-celery-results
 setuptools
-
+pillow
 ipython
 python-dotenv~=1.0.0
 pydub~=0.25.1
