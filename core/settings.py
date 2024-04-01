@@ -63,7 +63,6 @@ INSTALLED_APPS = [
     "projects.emaktabuz",
     "projects.tarjimon_bot",
     "projects.caption_editor_bot",
-    'projects.kinobot',
     "projects.uzummarket",
 
 ]
