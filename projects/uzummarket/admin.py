@@ -26,6 +26,11 @@ class ProductAdmin(admin.ModelAdmin):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ['vendor', 'shop', 'product', 'count', 'price', 'created_at', 'updated_at']
+    list_display = ['vendor', 'shop', 'product', 'count', 'price', 'image_html']
     list_filter = ['created_at', 'updated_at']
     search_fields = ['vendor', 'shop', 'product']
+
+    def image_html(self, obj):
+        if obj.rasmi:
+            return format_html(f'<img src="{obj.product.rasmi.url}" width="100" height="100" />')
+        return None
