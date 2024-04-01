@@ -2,6 +2,7 @@ import json
 
 from asgiref.sync import sync_to_async
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 from telegram import Update
 
 from .models import TelegramBot
@@ -29,7 +30,7 @@ async def token_checker(bot_token):
 
 
 
-
+@csrf_exempt
 async def handle_telegram_webhook(request, bot_token):
     print("handle_telegram_webhook...")
     print("bot_token: ", bot_token)

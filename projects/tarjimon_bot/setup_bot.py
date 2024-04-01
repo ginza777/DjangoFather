@@ -1,6 +1,7 @@
 import os
 
 from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
 from telegram import Bot, BotCommand
 from telegram.ext import (
     Application,
@@ -15,7 +16,7 @@ from telegram.ext import (
 
 from .views import start, translator, set_target_lang, set_native_lang, settings_user,about
 
-
+@csrf_exempt
 async def post_init(application: Application):
     print("post_init function is called.")
     await application.bot.set_my_commands(
@@ -30,7 +31,7 @@ async def post_init(application: Application):
         ]
     )
 
-
+@csrf_exempt
 async def setup(token):
     print("caption killer setup process...")
     persistence_file = os.path.join(settings.BASE_DIR, "media", "state_record", "conversationbot.pickle")
