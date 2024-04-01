@@ -31,6 +31,6 @@ class OrderAdmin(admin.ModelAdmin):
     search_fields = ['vendor', 'shop', 'product']
 
     def image_html(self, obj):
-        if obj.rasmi:
+        if obj.product.rasmi:
             return format_html(f'<img src="{obj.product.rasmi.url}" width="100" height="100" />')
         return None
