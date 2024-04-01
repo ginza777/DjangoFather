@@ -201,6 +201,7 @@ CELERY_BEAT_SCHEDULE = {
         "schedule": crontab(minute=0, hour=2),
     },
     'emaktab-task': {
+
         'task': 'projects.emaktabuz.tasks.post_req',
         "schedule": crontab(minute=0, hour=3),
     },
