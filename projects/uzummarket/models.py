@@ -22,7 +22,7 @@ class  Vendor(models.Model):
 
 class Product(models.Model):
     nomi= models.CharField(max_length=100)
-    rasmi = models.ImageField(upload_to='static/products')
+    rasmi = models.ImageField()
 
 
     def __str__(self):
