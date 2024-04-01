@@ -34,7 +34,7 @@ class Order(models.Model):
     shop = models.ForeignKey(Shop, on_delete=models.SET_NULL, null=True)
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
     count = models.IntegerField()
-    price = models.IntegerField()
+    price = models.FloatField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
