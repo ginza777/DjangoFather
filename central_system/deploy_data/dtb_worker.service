@@ -1,0 +1,15 @@
+sudo nano /etc/systemd/system/dtb.service
+
+[Unit]
+Description=Celery DjangoFather Worker
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/var/www/projects/DjangoFather/DjangoFather
+ExecStart=/bin/bash -c '/var/www/projects/DjangoFather/env/bin/celery -A core worker --loglevel=info '
+Restart=always
+User=root
+
+[Install]
+WantedBy=multi-user.target

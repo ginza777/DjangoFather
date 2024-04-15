@@ -1,0 +1,17 @@
+[Unit]
+Description=gunicorn daemon
+Requires=djangofather.socket
+After=network.target
+
+[Service]
+User=root
+Group=www-data
+WorkingDirectory=/var/www/projects/DjangoFather/DjangoFather
+ExecStart=/var/www/projects/DjangoFather/env/bin/gunicorn \
+          --access-logfile - \
+          --workers 8 \
+          --bind unix:/run/djangofather.sock \
+          core.wsgi:application
+
+[Install]
+WantedBy=multi-user.target

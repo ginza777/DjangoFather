@@ -13,7 +13,7 @@ from .utils.bot import set_webhook
 
 
 
-class ChatgptBotConfig(AppConfig):
+class CommonBotConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
     name = "projects.common"
 
@@ -21,11 +21,11 @@ class ChatgptBotConfig(AppConfig):
         asyncio.run(self.setup_webhook())
 
     async def setup_webhook(self):
-        print("setup webhook common...")
         try:
             bot_tokens = await self.get_bot_tokens()
-            for bot_token in bot_tokens:
-                await set_webhook(bot_token)
+            if len(bot_tokens) > 0:
+                for bot_token in bot_tokens:
+                    await set_webhook(bot_token)
         except telegram.error.RetryAfter:
             pass
         except requests.exceptions.ConnectionError:

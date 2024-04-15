@@ -2,6 +2,14 @@ from django.db import models
 from .utils.bot import set_webhook_sync, get_info
 import uuid
 
+class Language(models.TextChoices):
+    UZBEK = "uz", "Uzbek"
+    ENGLISH = "en", "English"
+    RUSSIAN = "ru", "Russian"
+    SPANISH = "es", "Spanish"
+    FRENCH = "fr", "French"
+    GERMAN = "de", "German"
+
 class TelegramBot(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)
     bot_token = models.CharField(max_length=255, unique=True)

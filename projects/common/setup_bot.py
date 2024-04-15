@@ -24,19 +24,17 @@ async def post_init(application: Application):
 
 
 async def setup(token):
-    print("caption killer setup process...")
     persistence_file = os.path.join(settings.BASE_DIR, "media", "state_record", "conversationbot.pickle")
     persistence = PicklePersistence(filepath=persistence_file)
     bot = Bot(token=token)
-    await bot.initialize()
     application = (
         ApplicationBuilder()
         .token(token)
-        .concurrent_updates(True)
-        .http_version("1.1")
-        .get_updates_http_version("1.1")
-        .post_init(post_init)
-        .persistence(persistence)
+        # .concurrent_updates(True)
+        # .http_version("1.1")
+        # .get_updates_http_version("1.1")
+        # .post_init(post_init)
+        # .persistence(persistence)
         .build()
     )
     application.add_handler(CommandHandler("about", about))
@@ -44,8 +42,6 @@ async def setup(token):
     application.add_handler(MessageHandler(filters.TEXT, about))
 
 
-    # # callback
-    # application.add_handler(CallbackQueryHandler(show_chat_modes_callback_handle, pattern="^show_chat_modes"))
 
     await application.initialize()
     return application, bot

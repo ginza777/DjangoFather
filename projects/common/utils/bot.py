@@ -9,7 +9,8 @@ async def set_webhook(bot_token):
     webhook_url = settings.WEBHOOK_URL
 
     application = Application.builder().token(bot_token).build()
-
+    print(100*'#')
+    print(f"{webhook_url}/{appname}/handle_telegram_webhook/{bot_token}")
     await application.bot.set_webhook(f"{webhook_url}/{appname}/handle_telegram_webhook/{bot_token}")
     print("Webhook set successfully for bot: {}".format((await application.bot.get_me()).username))
 

@@ -21,12 +21,11 @@ class ChatgptBotConfig(AppConfig):
         asyncio.run(self.setup_webhook())
 
     async def setup_webhook(self):
-        print("setup webhook caption editor bot...")
         try:
             bot_tokens = await self.get_bot_tokens()
-
-            for bot_token in bot_tokens:
-                await set_webhook(bot_token)
+            if len(bot_tokens) > 0:
+                for bot_token in bot_tokens:
+                    await set_webhook(bot_token)
         except telegram.error.RetryAfter:
             pass
         except requests.exceptions.ConnectionError:

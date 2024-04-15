@@ -1,7 +1,7 @@
 from channels.db import database_sync_to_async
 from django.utils.translation import activate
 
-from projects.tarjimon_bot import models
+from projects.common import models
 
 
 def get_member(func):
@@ -42,7 +42,8 @@ def get_member(func):
         print("Last Name:", last_name)
         print("Username:", username)
 
-
+        print(100*"*")
+        print(context.bot.username)
         bot = await models.TelegramBot.objects.aget(bot_username=context.bot.username)
 
         language_code = update.effective_user.language_code

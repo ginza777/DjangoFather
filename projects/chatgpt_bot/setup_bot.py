@@ -48,7 +48,7 @@ async def setup(token):
     persistence_file = os.path.join(settings.BASE_DIR, "media", "state_record", "conversationbot.pickle")
     persistence = PicklePersistence(filepath=persistence_file)
     bot = Bot(token=token)
-    await bot.initialize()
+    # await bot.initialize()
     application = (
         ApplicationBuilder()
         .token(token)
@@ -83,5 +83,5 @@ async def setup(token):
     application.add_handler(CallbackQueryHandler(settings_handle, pattern="^setting_back"))
     application.add_handler(CallbackQueryHandler(settings_handle, pattern="^delete_setting_back"))
 
-    await application.initialize()
+    # await application.initialize()
     return application, bot

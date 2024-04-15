@@ -1,0 +1,39 @@
+server {
+    server_name sherzamon.cloud;
+
+
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location /static/ {
+        root /var/www/projects/DjangoFather/DjangoFather;
+    }
+    # Media fayllar uchun
+    location /media/ {
+        root /var/www/projects/DjangoFather/DjangoFather;  # Media fayllari uchun papka yo'lini ko'rsatish
+    }
+
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/run/djangofather.sock;
+    }
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/sherzamon.cloud/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/sherzamon.cloud/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+}
+
+server {
+    if ($host = sherzamon.cloud) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    listen 80;
+    server_name sherzamon.cloud;
+    return 404; # managed by Certbot
+
+
+}

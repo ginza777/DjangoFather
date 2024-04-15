@@ -33,7 +33,7 @@ async def token_checker(bot_token):
 async def handle_telegram_webhook(request, bot_token):
     print("handle_telegram_webhook...")
     print("bot_token: ", bot_token)
-    await token_checker(bot_token)
+    # await token_checker(bot_token)
     try:
         application, bot = await setup(bot_token)
         body = request.body
